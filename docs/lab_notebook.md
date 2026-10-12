@@ -48,3 +48,12 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - Took simulation screenshots (Gazebo chase camera at offset −7, −7, 6 m via `PX4_GZ_FOLLOW_OFFSET_*`, plus the QGroundControl plan and flown track) → `media/stage1/`.
 - Copied the Stage 0 mission file into the repo (`sim/missions/stage0_baseline_mission.plan`).
 - Decided to publish through the GitHub website (upload in the browser) instead of GitHub Desktop.
+
+### 2026-10-12: Stage 2 — obstacle avoidance
+
+- **2.1 Environment check:** depth camera `/depth_camera` (640×480 float, 73° FOV, 0.2–19.1 m, 30 Hz); PX4 v1.18 uses versioned ROS2 topics (`vehicle_status_v4`); `gz.transport13` Python available → read depth directly, no bridge. First check script hung: PX4 started via `make` in the background grabbed the terminal (pxh shell). **Fix:** run the PX4 binary in daemon mode (`bin/px4 -d`) under `setsid` with stdin from `/dev/null`.
+- **Decision:** build `px4_msgs` from the local PX4 source (`setup_stage2.sh`) so message definitions always match the firmware.
+- **Decision:** core algorithm in a ROS-free module (`core.py`) + offline bench (`sim/offline/offline_sim.py`) with ray-cast depth of the same building. Offline: no-avoid → 4 hits (pillar at 18.7 s vs 19.1 s real); avoid → 0 hits, robust to 5 % depth noise and to the depth-convention question.
+- **Problem:** NumPy 2.2 (user pip) vs system SciPy/matplotlib built for NumPy 1.x → node crashed on first map update. **Fix:** pure-NumPy distance field (matches SciPy to 5e-8 m, 15 ms). Flight reports run outside WSL for now.
+- **Result (run_1012_1347_avoid):** full mission + return + landing in OFFBOARD, **0 impacts**, min clearance 0.90 m (doorway), 1.2–1.4 m to pillar/debris/partition, max tilt 13.9°, max estimate error 0.27 m, 47 replans, 1,783 depth frames. Real path ≈ offline prediction.
+- **Noted for Stage 3:** map edges ~0.25–0.75 m thicker than truth (likely depth/pose timing) — fix with timestamp matching before GPS denial.

@@ -91,3 +91,8 @@ INFO  [commander] Landing detected
 INFO  [commander] Disarmed by landing	
 INFO  [tone_alarm] notify neutral
 INFO  [logger] closed logfile, bytes written: 65578100
+
+PX4 Exiting...
+[2Kpxh> Exiting NOW.
+ninja: build stopped: interrupted by user.
+make: *** [Makefile:250: px4_sitl] Error 2

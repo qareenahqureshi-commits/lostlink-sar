@@ -6,11 +6,11 @@ A quadcopter flies a search mission inside a damaged building. At the entrance i
 
 Built on PX4 + Gazebo + QGroundControl + ROS2, fully in simulation, with a path to a real lightweight drone.
 
-![Stage 1 simulation: Gazebo and QGroundControl](media/stage1/stage1_gallery.jpg)
+![Before vs after: plain mission vs depth-camera avoidance](results/stage2/run_1012_1347_avoid/before_after.png)
 
-![Stage 1: real path vs what PX4 believed](results/stage1/truth_vs_estimate.png)
+*Same mission, same building. **Top (Stage 1):** a standard QGroundControl mission — 3 collisions and 31 s of tumbling (real path from Gazebo ground truth). **Bottom (Stage 2):** our ROS2 node with depth-camera mapping (green) and an EGO-Planner-style planner — 0 collisions, never closer than 0.9 m to anything, returns home and lands.*
 
-*Stage 1 baseline: a standard QGroundControl mission flown through a damaged building. Blue: the drone's real path (Gazebo ground truth). Orange dashed: what PX4 believed. X: collisions. After hitting the wall, the drone tumbled across the room for 9 s, and its own position estimate drifted up to 2.6 m from reality even with GPS. A normal mission has no awareness of obstacles. That's the problem this project solves.*
+![Stage 2 flight in Gazebo](media/stage2/stage2_gallery.jpg)
 
 ---
 
@@ -30,8 +30,8 @@ Full background and references: [docs/01_concept.md](docs/01_concept.md)
 |---|---|---|---|
 | 0 | Plain QGroundControl waypoint mission, empty world | ✅ Done | [stage0_baseline.md](docs/stage0_baseline.md) |
 | 1 | Same mission through a damaged building: show it crashes | ✅ Done | [stage1_obstacle_world.md](docs/stage1_obstacle_world.md) |
-| 2 | ROS2 offboard node: depth camera → obstacle avoidance | ⏭️ Next | – |
-| 3 | GPS denial mid-mission, drifting position estimate | Planned | – |
+| 2 | ROS2 offboard node: depth camera → obstacle avoidance | ✅ Done — 0 collisions | [stage2_avoidance.md](docs/stage2_avoidance.md) |
+| 3 | GPS denial mid-mission, drifting position estimate | ⏭️ Next | – |
 | 4 | Return-home decision + comms loss: experiments for the paper | Planned | – |
 
 Day-by-day problems and fixes: [docs/lab_notebook.md](docs/lab_notebook.md)
@@ -50,6 +50,10 @@ bash sim/scripts/set_params.sh
 # QGroundControl: Plan > Open > sim/missions/stage1_obstacle_mission.plan > Upload > Fly > start
 # After landing: truth-vs-estimate report from the newest log
 python3 sim/scripts/flight_report.py ~/PX4-Autopilot/build/px4_sitl_default/rootfs/log/<date>/<time>.ulg --stage stage1
+
+# Stage 2: obstacle avoidance (one-time build, then fly)
+bash sim/scripts/setup_stage2.sh
+bash sim/scripts/run_stage2.sh avoid
 ```
 
 ## Repository layout
@@ -59,7 +63,8 @@ docs/          concept, setup guide, one page per stage, lab notebook
 sim/worlds/    Gazebo world generator (obstacles + matching mission in one place)
 sim/missions/  QGroundControl .plan files
 sim/scripts/   run, parameter, log-analysis and plotting helpers
-ros2_ws/       ROS2 packages (from Stage 2)
+ros2_ws/       ROS2 package lostlink_planner (perception, mapping, planner, PX4 offboard node)
+sim/offline/   offline test bench for the planner (no PX4/Gazebo needed)
 results/       figures and data per stage
 media/         screenshots and videos
 ```

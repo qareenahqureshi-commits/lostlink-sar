@@ -1,0 +1,23 @@
+{
+  "before": {
+    "log": "stage1_run4_flight.ulg",
+    "min_clearance_m": 0.11,
+    "closest_obstacle": "partition"
+  },
+  "after": {
+    "log": "stage2_run_1012_1347_avoid.ulg",
+    "min_clearance_m": 0.9,
+    "closest_obstacle": "wall_west_s",
+    "min_clearance_per_obstacle_m": {
+      "debris_block": 1.35,
+      "partition": 1.38,
+      "pillar_1": 1.27,
+      "pillar_2": 2.31,
+      "pillar_3": 1.21,
+      "wall_north": 4.82,
+      "wall_south": 3.95,
+      "wall_west_n": 6.73,
+      "wall_west_s": 0.9
+    }
+  }
+}
