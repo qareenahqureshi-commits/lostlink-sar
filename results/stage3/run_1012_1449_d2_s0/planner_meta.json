@@ -1,0 +1,20 @@
+{
+  "n0": -15.0,
+  "e0": -10.0,
+  "res": 0.25,
+  "replans": 50,
+  "depth_frames": 1755,
+  "avoid": true,
+  "outcome": "completed",
+  "waypoints_reached": 6,
+  "gps_deny_east": 14.0,
+  "final_vio_drift_m": 1.573,
+  "final_est_pos_ne": [
+    -0.03,
+    0.11
+  ],
+  "frames_time_synced": 181,
+  "frames_fallback": 1574,
+  "depth_sync_lag_s_median": 0.164,
+  "depth_sync_lag_s_p95": 0.201
+}

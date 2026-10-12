@@ -57,3 +57,15 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - **Problem:** NumPy 2.2 (user pip) vs system SciPy/matplotlib built for NumPy 1.x → node crashed on first map update. **Fix:** pure-NumPy distance field (matches SciPy to 5e-8 m, 15 ms). Flight reports run outside WSL for now.
 - **Result (run_1012_1347_avoid):** full mission + return + landing in OFFBOARD, **0 impacts**, min clearance 0.90 m (doorway), 1.2–1.4 m to pillar/debris/partition, max tilt 13.9°, max estimate error 0.27 m, 47 replans, 1,783 depth frames. Real path ≈ offline prediction.
 - **Noted for Stage 3:** map edges ~0.25–0.75 m thicker than truth (likely depth/pose timing) — fix with timestamp matching before GPS denial.
+
+### 2026-10-12: Stage 3 — GPS denial on drifting VIO
+
+- **Design:** GPS jammed by PX4 failure injection at East 14 m; drone continues on simulated VIO (Gazebo truth + seeded drift, % of distance flown) fed to EKF2 as external vision. Height switched to baro, datalink-loss RTL disabled.
+- **Env check:** truth pose on `/world/sar_building/dynamic_pose/info`; failure injection works; PX4 = wall-clock µs, Gazebo images = sim time (RTF ~0.3) → explains Stage 2 smear.
+- **Offline sweep (12 runs):** 2 % → 3/3 home (0.8–1.8 m off); 5 % → 2/3 trapped inside; 10 % → 0/3 within 2 m; 20 % → lost. **0 collisions at every drift level.** Drift breaks getting home, not avoidance.
+- **Bugs:** float param type (sim_vio crash); stale Gazebo blocking restart (force-kill + verify); time-sync v1 used poses up to 15 s old → fake walls in doorway → drone flew around the building outside (aborted). v2: least-squares RTF + 1 s plausibility gate; only ~10 % frames matched, rest fallback.
+- **Real run 1012_1449 (2 %, seed 0):** completed, 0 impacts, min clearance 0.80 m, VIO drift 1.57 m, estimate error 1.48 m, **true landing 1.52 m from home** while the drone believed it was home. Matches offline.
+- WSL sometimes serves a stale copy of a just-edited script → use fresh file names for launchers.
+- **Real run 1012_1455 (2 %, repeat):** completed, 0 impacts, true landing **1.37 m** from home (vs 1.52 m) → repeatable.
+- **Real run 1012_1503 (5 %, seed 0):** all 5 waypoints, then `no_path` on the way home: west wall doubled in the drifting map, doorway filled → **trapped**, hovered 15 min until the timeout, landed 20.8 m from home. Matches offline. New: estimate error 2.7 m meant the drone really hovered **0.39 m** from a pillar while believing it had ≥ 1.2 m → drift shrinks real safety margin silently.
+- **Stage 3 closed (first pass).** Next: Stage 4 return decision (trust in own position + doorway still in map → turn back early).

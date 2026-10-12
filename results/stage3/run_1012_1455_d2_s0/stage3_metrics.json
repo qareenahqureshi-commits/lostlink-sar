@@ -1,0 +1,19 @@
+{
+  "outcome": "completed",
+  "waypoints_reached": 6,
+  "gps_jam_time_s": 24.2,
+  "vio_drift_final_m": 1.598,
+  "estimate_error_final_m": 1.48,
+  "estimate_error_max_m": 1.48,
+  "true_landing_ne_m": [
+    1.18,
+    0.7
+  ],
+  "true_distance_from_home_m": 1.37,
+  "believed_landing_ne_m": [
+    -0.01,
+    -0.18
+  ],
+  "impacts": 0,
+  "min_clearance_m": 0.83
+}

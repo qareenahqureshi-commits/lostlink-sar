@@ -1,0 +1,106 @@
+
+===== start headless sim + agent =====
+waiting 75 s...
+
+===== 1. Gazebo pose topics =====
+/clock
+/world/sar_building/clock
+/world/sar_building/dynamic_pose/info
+/world/sar_building/pose/info
+/model/x500_depth_0/odometry_with_covariance
+--- one dynamic_pose message (names + header):
+3:    sec: 47
+4:    nsec: 592000000
+8:  name: "x500_depth_0"
+23:  name: "base_link"
+33:  name: "rotor_0"
+48:  name: "rotor_1"
+63:  name: "rotor_2"
+78:  name: "rotor_3"
+93:  name: "camera_link"
+--- pose/info x500 entry:
+175:  name: "x500_depth_0"
+176-  id: 61
+177-  position {
+178-    x: -7.0777431049074878e-11
+179-    y: -2.6380911019043811e-18
+180-    z: -0.013000184962740718
+181-  }
+182-  orientation {
+183-    x: -1.4527404250304533e-17
+184-    y: 2.6854622711680443e-09
+185-    z: -5.0649089124498611e-18
+186-    w: 1
+187-  }
+
+===== 2. clocks (sample both within ~1 s) =====
+system {
+  sec: 1791801099
+  nsec: 669774909
+}
+real {
+  sec: 71
+  nsec: 821667123
+}
+timestamp: 1791801102168427
+timestamp_sample: 1791801102168427
+system {
+  sec: 1791801102
+  nsec: 951442732
+}
+real {
+  sec: 75
+  nsec: 103334751
+}
+--- depth image header:
+header {
+  stamp {
+    sec: 50
+    nsec: 724000000
+  }
+
+===== 3. params =====
+x     SYS_FAILURE_EN [1083,1684] : 1
+x     EKF2_GPS_CTRL [402,625] : 7
+x     EKF2_EV_CTRL [390,613] : 0
+x     EKF2_EV_DELAY [391,614] : 0.0000
+x     EKF2_HGT_REF [416,639] : 1
+x     EKF2_EVP_NOISE [387,610] : 0.1000
+x     NAV_DLL_ACT [698,1163] : 2
+
+===== 4. GPS failure injection test (on the ground) =====
+--- before:
+    cs_gnss_pos: True
+    cs_ev_pos: False
+    cs_inertial_dead_reckoning: False
+    cs_gnss_vel: True
+    fix_type: 3
+    satellites_used: 10
+WARN  [failure] inject failure unit: gps (4), type: off (1), instance: 0
+--- after 'failure gps off' (8 s):
+    cs_gnss_pos: True
+    cs_ev_pos: False
+    cs_inertial_dead_reckoning: True
+    cs_gnss_vel: True
+    timestamp: 51184000 (6.076000 seconds ago)
+    fix_type: 3
+    satellites_used: 10
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+WARN  [health_and_arming_checks] Preflight Fail: no heading reference
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+INFO  [uxrce_dds_client] successfully created rt/fmu/out/failsafe_flags data writer, topic id: 98
+INFO  [uxrce_dds_client] successfully created rt/fmu/out/vehicle_gps_position data writer, topic id: 298
+WARN  [failure_injection_manager] Injected: gps off, all instances
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+--- alternative: EKF2_GPS_CTRL=0 (stop fusing GPS)
+WARN  [failure] inject failure unit: gps (4), type: ok (0), instance: 0
+  EKF2_GPS_CTRL: curr: 7 -> new: 0
+    cs_gnss_pos: False
+    cs_inertial_dead_reckoning: True
+    cs_gnss_vel: False
++ EKF2_GPS_CTRL: curr: 0 -> new: 7
+  SYS_FAILURE_EN: curr: 1 -> new: 0
+
+===== shutdown =====
+DONE

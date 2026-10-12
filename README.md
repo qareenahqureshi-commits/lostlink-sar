@@ -31,7 +31,7 @@ Full background and references: [docs/01_concept.md](docs/01_concept.md)
 | 0 | Plain QGroundControl waypoint mission, empty world | ✅ Done | [stage0_baseline.md](docs/stage0_baseline.md) |
 | 1 | Same mission through a damaged building: show it crashes | ✅ Done | [stage1_obstacle_world.md](docs/stage1_obstacle_world.md) |
 | 2 | ROS2 offboard node: depth camera → obstacle avoidance | ✅ Done — 0 collisions | [stage2_avoidance.md](docs/stage2_avoidance.md) |
-| 3 | GPS denial mid-mission, drifting position estimate | ⏭️ Next | – |
+| 3 | GPS jammed at the doorway, drifting VIO | ✅ Done — 2 % drift: home but ~1.5 m off; 5 % drift: **trapped inside** (doorway vanished from its map). Drift breaks the way home before avoidance | [stage3_gps_denied.md](docs/stage3_gps_denied.md) |
 | 4 | Return-home decision + comms loss: experiments for the paper | Planned | – |
 
 Day-by-day problems and fixes: [docs/lab_notebook.md](docs/lab_notebook.md)

@@ -129,3 +129,6 @@ INFO  [commander] Landing at current position
 INFO  [commander] Disarmed by landing	
 INFO  [tone_alarm] notify neutral
 INFO  [logger] closed logfile, bytes written: 24878012
+
+PX4 Exiting...
+Exiting NOW.
