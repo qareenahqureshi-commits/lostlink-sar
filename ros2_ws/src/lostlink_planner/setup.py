@@ -13,5 +13,9 @@ setup(
     maintainer="Kareena Mueenuddin",
     description="Lost-Link SAR Stage 2 planner",
     license="MIT",
-    entry_points={"console_scripts": ["avoid_mission = lostlink_planner.avoid_mission_node:main"]},
+    entry_points={"console_scripts": [
+        "avoid_mission = lostlink_planner.avoid_mission_node:main",
+        "sim_vio = lostlink_planner.sim_vio_node:main",
+        "sim_link = lostlink_planner.sim_link_node:main",
+    ]},
 )

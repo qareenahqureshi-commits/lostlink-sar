@@ -1,0 +1,9 @@
+{
+  "takeoff_to_rtl_s": 95.5,
+  "impacts": [],
+  "max_tilt_deg": 13.9,
+  "min_truth_alt_in_mission_m": -0.01,
+  "max_position_error_m": 0.27,
+  "max_estimated_hspeed_mps": 1.5,
+  "max_true_hspeed_mps": 1.47
+}

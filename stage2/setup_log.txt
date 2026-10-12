@@ -1,0 +1,15 @@
+== px4_msgs ==
+264 message files copied from /home/kareena/PX4-Autopilot
+== lostlink_planner (linked from repo) ==
+== build (px4_msgs takes a few minutes) ==
+Starting >>> px4_msgs
+Finished <<< px4_msgs [20.3s]
+Starting >>> lostlink_planner
+Finished <<< lostlink_planner [8.40s]
+
+Summary: 2 packages finished [29.4s]
+== checks ==
+px4_msgs OK - VehicleStatus version 4
+lostlink_planner OK
+gz-transport OK
+SETUP DONE

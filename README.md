@@ -12,6 +12,10 @@ Built on PX4 + Gazebo + QGroundControl + ROS2, fully in simulation, with a path 
 
 ![Stage 2 flight in Gazebo](media/stage2/stage2_gallery.jpg)
 
+![Stage 4: GPS and radio link jammed at the door](results/stage4/run_1012_1618_stage4_d5_s0/stage4_paths.png)
+
+*Stage 4, real PX4 + Gazebo flight: GPS **and** the radio link are jammed at the door. PX4's own position estimate (orange dotted) drifts 2.9 m, but the drone recognises the parts of the building it mapped with GPS, corrects itself (purple), decides on its own when to turn back, and lands **0.35 m** from home.*
+
 ---
 
 ## The idea in one table
@@ -20,7 +24,8 @@ Built on PX4 + Gazebo + QGroundControl + ROS2, fully in simulation, with a path 
 |---|---|---|
 | Local obstacle avoidance | EGO-Planner (Zhou et al., ZJU FAST Lab), re-implemented in ROS2 | Bends the flight path around obstacles seen by the depth camera |
 | Path home | GBPlanner (NTNU ARL, DARPA SubT winner) | Keeps a graph of known-safe routes back to base |
-| **Return decision (new)** | This project | Triggers return when the risk of *not getting home* crosses a limit. The risk combines GPS-free position drift, radio link status and battery, not just a fixed battery threshold. |
+| **Return decision (new)** | This project | Predicts how lost the drone will be by the time it is back at the exit. It turns back before that passes what it can still recognise (or the landing/battery budget), with the drift rate learned in flight. |
+| Relocalisation against an anchor map | This project | Recognises the parts of the building it mapped while GPS still worked, and corrects its own drift |
 
 Full background and references: [docs/01_concept.md](docs/01_concept.md)
 
@@ -32,7 +37,7 @@ Full background and references: [docs/01_concept.md](docs/01_concept.md)
 | 1 | Same mission through a damaged building: show it crashes | ✅ Done | [stage1_obstacle_world.md](docs/stage1_obstacle_world.md) |
 | 2 | ROS2 offboard node: depth camera → obstacle avoidance | ✅ Done — 0 collisions | [stage2_avoidance.md](docs/stage2_avoidance.md) |
 | 3 | GPS jammed at the doorway, drifting VIO | ✅ Done — 2 % drift: home but ~1.5 m off; 5 % drift: **trapped inside** (doorway vanished from its map). Drift breaks the way home before avoidance | [stage3_gps_denied.md](docs/stage3_gps_denied.md) |
-| 4 | Return-home decision + comms loss: experiments for the paper | Planned | – |
+| 4 | GPS **and** radio link jammed: drift-aware map, relocalisation, return decision | ✅ Done — real flights land **0.35–0.89 m** from home at 5–10 % drift (Stage 3: trapped, 20.8 m); offline 100 % safe return up to 10 % drift (Stage 3: 0 %) | [stage4_return_decision.md](docs/stage4_return_decision.md) |
 
 Day-by-day problems and fixes: [docs/lab_notebook.md](docs/lab_notebook.md)
 
@@ -54,6 +59,11 @@ python3 sim/scripts/flight_report.py ~/PX4-Autopilot/build/px4_sitl_default/root
 # Stage 2: obstacle avoidance (one-time build, then fly)
 bash sim/scripts/setup_stage2.sh
 bash sim/scripts/run_stage2.sh avoid
+
+# Stage 3 / 4: GPS (and link) jammed at the door, drifting VIO
+bash sim/scripts/run_stage3.sh 5 0
+bash sim/scripts/run_stage4.sh stage4 5 0
+python3 sim/offline/stage4_bench.py --policy stage4 --drift 10 --seed 0 --plot out.png   # no simulator needed
 ```
 
 ## Repository layout

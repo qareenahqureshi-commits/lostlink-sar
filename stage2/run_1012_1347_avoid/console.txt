@@ -1,0 +1,110 @@
+== clean start ==
+== PX4 + Gazebo (GUI) + agent + QGroundControl ==
+PX4 ready
+== mission node (avoid=avoid) ==
+[INFO] [1791798496.697678337] [lostlink_avoid_mission]: 5 waypoints (N,E): [(0.0, 8.0), (0.0, 20.0), (5.0, 38.0), (-6.0, 38.0), (-6.0, 22.0)]
+[INFO] [1791798497.496661936] [lostlink_avoid_mission]: depth subscription /depth_camera: ok
+[INFO] [1791798497.564998807] [lostlink_avoid_mission]: avoidance=ON, logging to /mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/results/stage2/run_1012_1347_avoid
+[INFO] [1791798497.684011365] [lostlink_avoid_mission]: state WAIT_ODOM -> STREAM
+[INFO] [1791798499.274536287] [lostlink_avoid_mission]: state STREAM -> ARM
+[INFO] [1791798499.715044795] [lostlink_avoid_mission]: state ARM -> TAKEOFF
+[INFO] [1791798502.740015343] [lostlink_avoid_mission]: TAKEOFF pos=(-0.0,-0.0,-0.0) goal#0 mode=- depth_frames=31 occ=79
+[INFO] [1791798507.866691651] [lostlink_avoid_mission]: TAKEOFF pos=(-0.0,-0.0,0.0) goal#0 mode=- depth_frames=64 occ=82
+[INFO] [1791798512.955073689] [lostlink_avoid_mission]: TAKEOFF pos=(0.1,0.1,1.9) goal#0 mode=- depth_frames=95 occ=85
+[INFO] [1791798517.702764626] [lostlink_avoid_mission]: state TAKEOFF -> MISSION
+[INFO] [1791798518.097355043] [lostlink_avoid_mission]: MISSION pos=(0.0,0.0,2.7) goal#0 mode=direct depth_frames=126 occ=86
+[INFO] [1791798523.154049532] [lostlink_avoid_mission]: MISSION pos=(0.1,1.8,2.9) goal#0 mode=direct depth_frames=156 occ=177
+[INFO] [1791798528.272209670] [lostlink_avoid_mission]: MISSION pos=(0.0,4.2,3.0) goal#0 mode=direct depth_frames=187 occ=182
+[INFO] [1791798533.357652025] [lostlink_avoid_mission]: MISSION pos=(-0.0,6.7,3.0) goal#0 mode=direct depth_frames=217 occ=192
+[INFO] [1791798538.489998674] [lostlink_avoid_mission]: MISSION pos=(-0.1,9.1,3.0) goal#1 mode=astar depth_frames=249 occ=199
+[INFO] [1791798543.653232288] [lostlink_avoid_mission]: MISSION pos=(-0.3,11.7,3.0) goal#1 mode=astar depth_frames=282 occ=214
+[INFO] [1791798548.712723578] [lostlink_avoid_mission]: MISSION pos=(-0.5,15.0,3.0) goal#1 mode=astar depth_frames=313 occ=274
+[INFO] [1791798553.827862535] [lostlink_avoid_mission]: MISSION pos=(-0.4,17.5,3.0) goal#1 mode=direct depth_frames=344 occ=346
+[INFO] [1791798559.037056236] [lostlink_avoid_mission]: MISSION pos=(-0.0,19.7,3.0) goal#2 mode=astar depth_frames=377 occ=384
+[INFO] [1791798564.105728375] [lostlink_avoid_mission]: MISSION pos=(0.9,21.1,3.0) goal#2 mode=astar depth_frames=413 occ=502
+[INFO] [1791798569.240091837] [lostlink_avoid_mission]: MISSION pos=(1.9,22.7,3.0) goal#2 mode=astar depth_frames=453 occ=506
+[INFO] [1791798574.335337298] [lostlink_avoid_mission]: MISSION pos=(2.9,24.3,3.0) goal#2 mode=astar depth_frames=495 occ=517
+[INFO] [1791798579.392315753] [lostlink_avoid_mission]: MISSION pos=(3.4,26.5,3.0) goal#2 mode=direct depth_frames=535 occ=598
+[INFO] [1791798584.438547669] [lostlink_avoid_mission]: MISSION pos=(3.7,28.3,3.0) goal#2 mode=direct depth_frames=575 occ=631
+[INFO] [1791798589.495619874] [lostlink_avoid_mission]: MISSION pos=(3.9,30.1,3.0) goal#2 mode=direct depth_frames=616 occ=636
+[INFO] [1791798594.544118597] [lostlink_avoid_mission]: MISSION pos=(4.1,31.8,3.0) goal#2 mode=direct depth_frames=655 occ=637
+[INFO] [1791798599.574294437] [lostlink_avoid_mission]: MISSION pos=(4.4,33.6,3.0) goal#2 mode=direct depth_frames=695 occ=637
+[INFO] [1791798604.685352628] [lostlink_avoid_mission]: MISSION pos=(4.6,35.7,3.0) goal#2 mode=direct depth_frames=731 occ=637
+[INFO] [1791798609.855365694] [lostlink_avoid_mission]: MISSION pos=(5.0,38.0,2.9) goal#3 mode=astar depth_frames=764 occ=918
+[INFO] [1791798614.975812837] [lostlink_avoid_mission]: MISSION pos=(3.6,37.2,3.0) goal#3 mode=astar depth_frames=797 occ=1060
+[INFO] [1791798620.092605873] [lostlink_avoid_mission]: MISSION pos=(1.5,36.1,3.0) goal#3 mode=astar depth_frames=832 occ=1077
+[INFO] [1791798625.143725144] [lostlink_avoid_mission]: MISSION pos=(-0.7,35.2,3.0) goal#3 mode=astar depth_frames=864 occ=1091
+[INFO] [1791798630.218407384] [lostlink_avoid_mission]: MISSION pos=(-3.0,36.0,3.0) goal#3 mode=direct depth_frames=895 occ=1098
+[INFO] [1791798635.393368091] [lostlink_avoid_mission]: MISSION pos=(-4.9,37.3,3.0) goal#3 mode=direct depth_frames=929 occ=1098
+[INFO] [1791798640.539382090] [lostlink_avoid_mission]: MISSION pos=(-5.7,37.8,3.0) goal#4 mode=astar depth_frames=966 occ=1137
+[INFO] [1791798645.651792233] [lostlink_avoid_mission]: MISSION pos=(-4.4,35.8,3.0) goal#4 mode=astar depth_frames=1000 occ=1194
+[INFO] [1791798650.786268622] [lostlink_avoid_mission]: MISSION pos=(-3.4,34.1,3.0) goal#4 mode=astar depth_frames=1037 occ=1205
+[INFO] [1791798655.836164061] [lostlink_avoid_mission]: MISSION pos=(-2.5,32.5,3.0) goal#4 mode=astar depth_frames=1075 occ=1225
+[INFO] [1791798660.954417521] [lostlink_avoid_mission]: MISSION pos=(-1.7,30.8,3.0) goal#4 mode=astar depth_frames=1114 occ=1263
+[INFO] [1791798666.016563147] [lostlink_avoid_mission]: MISSION pos=(-1.8,29.1,3.0) goal#4 mode=astar depth_frames=1154 occ=1408
+[INFO] [1791798671.078963204] [lostlink_avoid_mission]: MISSION pos=(-3.1,26.8,3.0) goal#4 mode=direct depth_frames=1188 occ=1409
+[INFO] [1791798676.141940261] [lostlink_avoid_mission]: MISSION pos=(-4.4,24.7,3.0) goal#4 mode=direct depth_frames=1218 occ=1414
+[INFO] [1791798681.179905575] [lostlink_avoid_mission]: MISSION pos=(-5.7,22.6,3.0) goal#4 mode=direct depth_frames=1249 occ=1414
+[INFO] [1791798686.505394461] [lostlink_avoid_mission]: MISSION pos=(-5.6,21.7,3.0) goal#5 mode=astar depth_frames=1283 occ=1474
+[INFO] [1791798691.869809815] [lostlink_avoid_mission]: MISSION pos=(-4.2,19.8,3.0) goal#5 mode=astar depth_frames=1319 occ=1485
+[INFO] [1791798697.091576242] [lostlink_avoid_mission]: MISSION pos=(-2.7,18.0,3.0) goal#5 mode=astar depth_frames=1350 occ=1486
+[INFO] [1791798702.203885860] [lostlink_avoid_mission]: MISSION pos=(-0.7,15.6,3.0) goal#5 mode=astar depth_frames=1382 occ=1486
+[INFO] [1791798707.299146494] [lostlink_avoid_mission]: MISSION pos=(-0.5,12.9,3.0) goal#5 mode=direct depth_frames=1413 occ=1486
+[INFO] [1791798712.365574640] [lostlink_avoid_mission]: MISSION pos=(-0.4,10.4,3.0) goal#5 mode=direct depth_frames=1443 occ=1486
+[INFO] [1791798717.471080453] [lostlink_avoid_mission]: MISSION pos=(-0.4,7.8,3.0) goal#5 mode=direct depth_frames=1475 occ=1486
+[INFO] [1791798722.588762588] [lostlink_avoid_mission]: MISSION pos=(-0.3,5.2,3.0) goal#5 mode=direct depth_frames=1507 occ=1486
+[INFO] [1791798727.641834826] [lostlink_avoid_mission]: MISSION pos=(-0.1,2.7,3.0) goal#5 mode=direct depth_frames=1538 occ=1486
+[INFO] [1791798730.648135973] [lostlink_avoid_mission]: state MISSION -> LAND
+[INFO] [1791798732.747287014] [lostlink_avoid_mission]: LAND pos=(-0.0,0.1,2.8) goal#6 mode=done depth_frames=1569 occ=1486
+[INFO] [1791798737.811903308] [lostlink_avoid_mission]: LAND pos=(0.0,0.0,1.9) goal#6 mode=done depth_frames=1600 occ=1486
+[INFO] [1791798742.903076705] [lostlink_avoid_mission]: LAND pos=(-0.0,0.1,0.6) goal#6 mode=done depth_frames=1632 occ=1486
+[INFO] [1791798748.002284840] [lostlink_avoid_mission]: LAND pos=(-0.0,0.1,0.0) goal#6 mode=done depth_frames=1664 occ=1486
+[INFO] [1791798753.094306251] [lostlink_avoid_mission]: LAND pos=(0.0,0.1,0.0) goal#6 mode=done depth_frames=1695 occ=1486
+[INFO] [1791798758.196450365] [lostlink_avoid_mission]: LAND pos=(0.0,0.1,0.0) goal#6 mode=done depth_frames=1728 occ=1486
+[INFO] [1791798763.251933365] [lostlink_avoid_mission]: LAND pos=(0.0,0.1,-0.0) goal#6 mode=done depth_frames=1760 occ=1486
+[INFO] [1791798766.800837988] [lostlink_avoid_mission]: state LAND -> DONE
+[INFO] [1791798766.922002579] [lostlink_avoid_mission]: mission complete, logs saved
+== flight log + report ==
+log: /home/kareena/PX4-Autopilot/build/px4_sitl_default/rootfs/log/2026-10-12/09_48_02.ulg
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/sim/scripts/flight_report.py", line 19, in <module>
+    import matplotlib
+  File "/usr/lib/python3/dist-packages/matplotlib/__init__.py", line 109, in <module>
+    from . import _api, _version, cbook, docstring, rcsetup
+  File "/usr/lib/python3/dist-packages/matplotlib/rcsetup.py", line 27, in <module>
+    from matplotlib.colors import Colormap, is_color_like
+  File "/usr/lib/python3/dist-packages/matplotlib/colors.py", line 56, in <module>
+    from matplotlib import _api, cbook, scale
+  File "/usr/lib/python3/dist-packages/matplotlib/scale.py", line 23, in <module>
+    from matplotlib.ticker import (
+  File "/usr/lib/python3/dist-packages/matplotlib/ticker.py", line 136, in <module>
+    from matplotlib import transforms as mtransforms
+  File "/usr/lib/python3/dist-packages/matplotlib/transforms.py", line 46, in <module>
+    from matplotlib._path import (
+AttributeError: _ARRAY_API not found
+Traceback (most recent call last):
+  File "/mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/sim/scripts/flight_report.py", line 19, in <module>
+    import matplotlib
+  File "/usr/lib/python3/dist-packages/matplotlib/__init__.py", line 109, in <module>
+    from . import _api, _version, cbook, docstring, rcsetup
+  File "/usr/lib/python3/dist-packages/matplotlib/rcsetup.py", line 27, in <module>
+    from matplotlib.colors import Colormap, is_color_like
+  File "/usr/lib/python3/dist-packages/matplotlib/colors.py", line 56, in <module>
+    from matplotlib import _api, cbook, scale
+  File "/usr/lib/python3/dist-packages/matplotlib/scale.py", line 23, in <module>
+    from matplotlib.ticker import (
+  File "/usr/lib/python3/dist-packages/matplotlib/ticker.py", line 136, in <module>
+    from matplotlib import transforms as mtransforms
+  File "/usr/lib/python3/dist-packages/matplotlib/transforms.py", line 46, in <module>
+    from matplotlib._path import (
+ImportError: numpy.core.multiarray failed to import
+RUN FINISHED: run_1012_1347_avoid

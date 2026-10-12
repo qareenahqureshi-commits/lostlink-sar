@@ -69,3 +69,13 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - **Real run 1012_1455 (2 %, repeat):** completed, 0 impacts, true landing **1.37 m** from home (vs 1.52 m) → repeatable.
 - **Real run 1012_1503 (5 %, seed 0):** all 5 waypoints, then `no_path` on the way home: west wall doubled in the drifting map, doorway filled → **trapped**, hovered 15 min until the timeout, landed 20.8 m from home. Matches offline. New: estimate error 2.7 m meant the drone really hovered **0.39 m** from a pillar while believing it had ≥ 1.2 m → drift shrinks real safety margin silently.
 - **Stage 3 closed (first pass).** Next: Stage 4 return decision (trust in own position + doorway still in map → turn back early).
+
+### 2026-10-12: Stage 4 — GPS + link jammed, return decision
+
+- **Design:** drift-aware map (cells forgotten after W = e_tol/r̂ metres of GPS-free flight), anchor map + 2D correlative relocalisation, breadcrumb graph home, return decision predicting σ at the exit vs capture radius (3 m), landing budget (2 m), battery. Link model: wall count + path loss; jammer also takes the link at the door.
+- **Offline debugging:** breadcrumbs alone pointed ~4 m off the real door at 5 % drift → added relocalisation. Route retraced the whole loop and stalled → plan straight to exit, breadcrumbs only when stuck. Phantom wall in the doorway from shifted stale cells → drop stale cells on shift. Decision never fired at 20 % → learn drift rate from relocalisation shifts. Landing error from the last 15 m outside → fly backwards facing the facade.
+- **Monte Carlo (240 runs, 10 seeds):** safe return within 2 m — Stage 3: 40/0/0/0 % at 2/5/10/20 % drift; Stage 4: 100/100/100/40 %. Map + relocalisation without the decision: 100/100/100/10 % with full coverage → the decision only pays off at 20 % and costs ~0.4–1 waypoint below that. Optimistic 2 % prior → door-frame collisions at ≥10 %.
+- **Real flights:** Stage 4 at 5 % (2 seeds) and 10 % landed 0.35 / 0.52 / 0.89 m from home, 0 collisions, while PX4's estimate was 2.9 / 2.9 / 6.0 m off. Link-loss rule: 2/5 waypoints, 0.74 m. All Stage 4 real flights turned back after waypoint 3.
+- **Limitation found:** drift-rate estimate biased low with frequent small corrections (real 10 % run learned 5–6 %). Next: long-baseline estimator, deeper building.
+- Tooling: device file sync sometimes served a stale copy → commit under fresh file names; container restart lost a partial sweep → sweep resumes from runs.jsonl.
+
