@@ -1,0 +1,40 @@
+{
+  "takeoff_to_rtl_s": 88.5,
+  "impacts": [
+    {
+      "t_s": 19.13,
+      "contact_duration_s": 0.0,
+      "peak_accel_g": 30.3,
+      "truth_pos_east_north_m": [
+        24.41,
+        1.19
+      ],
+      "min_truth_alt_during_m": 1.32
+    },
+    {
+      "t_s": 32.89,
+      "contact_duration_s": 3.35,
+      "peak_accel_g": 54.6,
+      "truth_pos_east_north_m": [
+        38.18,
+        0.05
+      ],
+      "min_truth_alt_during_m": 0.04
+    },
+    {
+      "t_s": 45.82,
+      "contact_duration_s": 31.2,
+      "peak_accel_g": 166.1,
+      "truth_pos_east_north_m": [
+        30.44,
+        -6.07
+      ],
+      "min_truth_alt_during_m": -0.0
+    }
+  ],
+  "max_tilt_deg": 125.5,
+  "min_truth_alt_in_mission_m": -0.01,
+  "max_position_error_m": 2.76,
+  "max_estimated_hspeed_mps": 12.38,
+  "max_true_hspeed_mps": 9.76
+}

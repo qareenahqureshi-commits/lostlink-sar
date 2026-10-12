@@ -1,0 +1,93 @@
+== system ==
+Description:	Ubuntu 22.04.5 LTS
+ROS_DISTRO=humble
+PX4: /home/kareena/PX4-Autopilot (v1.18.0-beta1-582-gfec216e9d7)
+8.15.0
+== stopping any running sim ==
+== generate world + mission ==
+[..] using  /home/kareena/PX4-Autopilot/Tools/simulation/gz/worlds/default.sdf
+[..] home   lat=47.3979711 lon=8.5461637
+[ok] world  -> /home/kareena/PX4-Autopilot/Tools/simulation/gz/worlds/sar_building.sdf
+[ok] plan   -> /mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/sim/missions/stage1_obstacle_mission.plan
+
+Next:
+  cd /home/kareena/PX4-Autopilot
+  PX4_GZ_WORLD=sar_building make px4_sitl gz_x500_depth
+== launch PX4 SITL (sar_building, x500_depth) ==
+   In QGroundControl: Plan > Open > sim/missions/stage1_obstacle_mission.plan > Upload > Fly
+   Remember: NAV_ACC_RAD must be 0.5 (bash sim/scripts/set_params.sh)
+[0/1] cd /home/kareena/PX4-Autopilot/build/px4_sitl_default/src/modules/simulation/gz_bridge && /usr/bin/cmake -E env PX4_SIM_MODEL=gz_x500_depth GZ_IP=127.0.0.1 /home/kareena/PX4-Autopilot/build/px4_sitl_default/bin/px4
+
+______  __   __    ___ 
+| ___ \ \ \ / /   /   |
+| |_/ /  \ V /   / /| |
+|  __/   /   \  / /_| |
+| |     / /^\ \ \___  |
+\_|     \/   \/     |_/
+
+px4 starting.
+
+INFO  [px4] startup script: /bin/sh etc/init.d-posix/rcS 0
+INFO  [init] found model autostart file as SYS_AUTOSTART=4002
+INFO  [param] selected parameter default file parameters.bson
+INFO  [param] importing from 'parameters.bson'
+INFO  [parameters] BSON document size 235 bytes, decoded 235 bytes (INT32:6, FLOAT:5)
+INFO  [param] selected parameter backup file parameters_backup.bson
+INFO  [dataman] data manager file './dataman' size is 1208528 bytes
+INFO  [init] Gazebo simulator 8.15.0
+INFO  [init] Starting gazebo with world: /home/kareena/PX4-Autopilot/Tools/simulation/gz/worlds/sar_building.sdf
+INFO  [init] Starting gz gui
+INFO  [init] Waiting for Gazebo world...
+INFO  [init] Gazebo world is ready
+INFO  [init] Spawning Gazebo model
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="x500_base"]/link[@name="base_link"]/sensor[@name="air_pressure_sensor"]/gz_frame_id:/home/kareena/PX4-Autopilot/Tools/simulation/gz/models/x500_base/model.sdf:L219]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="x500_base"]/link[@name="base_link"]/sensor[@name="magnetometer_sensor"]/gz_frame_id:/home/kareena/PX4-Autopilot/Tools/simulation/gz/models/x500_base/model.sdf:L233]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="x500_base"]/link[@name="base_link"]/sensor[@name="imu_sensor"]/gz_frame_id:/home/kareena/PX4-Autopilot/Tools/simulation/gz/models/x500_base/model.sdf:L259]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="x500_base"]/link[@name="base_link"]/sensor[@name="navsat_sensor"]/gz_frame_id:/home/kareena/PX4-Autopilot/Tools/simulation/gz/models/x500_base/model.sdf:L311]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="OakD-Lite"]/link[@name="camera_link"]/sensor[@name="IMX214"]/gz_frame_id:/home/kareena/PX4-Autopilot/Tools/simulation/gz/models/OakD-Lite/model.sdf:L38]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="OakD-Lite"]/link[@name="camera_link"]/sensor[@name="StereoOV7251"]/gz_frame_id:/home/kareena/PX4-Autopilot/Tools/simulation/gz/models/OakD-Lite/model.sdf:L56]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+INFO  [gz_bridge] world: sar_building, model: x500_depth_0
+INFO  [init] Setting camera to follow x500_depth_0
+INFO  [init] Camera follow offset set to -7, -7, 6
+INFO  [commander] LED: open /dev/led0 failed (22)
+INFO  [vision_target_estimator] VTE for static target init
+INFO  [uxrce_dds_client] init UDP agent IP:127.0.0.1, port:8888
+INFO  [mavlink] mode: Normal, data rate: 4000000 B/s on udp port 18570 remote port 14550
+INFO  [lockstep_scheduler] setting initial absolute time to 3484000 us
+INFO  [mavlink] mode: Onboard, data rate: 4000000 B/s on udp port 14580 remote port 14540
+WARN  [health_and_arming_checks] Preflight Fail: ekf2 missing data
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+INFO  [mavlink] mode: Onboard, data rate: 4000 B/s on udp port 14280 remote port 14030
+INFO  [mavlink] mode: Gimbal, data rate: 400000 B/s on udp port 13030 remote port 13280
+INFO  [tone_alarm] home set
+INFO  [logger] logger started (mode=all)
+INFO  [logger] Max log file size: 1024 MiB
+INFO  [logger] Start file log (type: full)
+INFO  [logger] [logger] ./log/2026-10-12/08_25_08.ulg	
+INFO  [logger] Opened full log file: ./log/2026-10-12/08_25_08.ulg
+INFO  [mavlink] MAVLink only on localhost (set param MAV_{i}_BROADCAST = 1 to enable network)
+INFO  [mavlink] MAVLink only on localhost (set param MAV_{i}_BROADCAST = 1 to enable network)
+INFO  [px4] Startup script returned successfully
+pxh> WARN  [health_and_arming_checks] Preflight Fail: no heading reference
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+INFO  [tone_alarm] notify positive
+WARN  [health_and_arming_checks] Preflight Fail: No connection to the GCS
+INFO  [mavlink] partner IP: 127.0.0.1
+INFO  [commander] [32mReady for takeoff![0m
+INFO  [tone_alarm] notify positive
+INFO  [commander] Armed by external command	
+INFO  [tone_alarm] arming warning
+INFO  [navigator] Executing Mission	
+INFO  [navigator] Climb to 3.0 meters above home	
+INFO  [commander] Takeoff detected	
+WARN  [health_and_arming_checks] Preflight Fail: Attitude failure (roll)
+WARN  [health_and_arming_checks] Preflight Fail: Attitude failure (roll)
+WARN  [health_and_arming_checks] Preflight Fail: Attitude failure (roll)
+INFO  [navigator] Mission finished, loitering	
+INFO  [commander] Returning to launch	
+INFO  [navigator] RTL: start return at 31 m (30 m above destination)	
+INFO  [navigator] RTL: land at destination	
+INFO  [commander] Landing detected	
+INFO  [commander] Disarmed by landing	
+INFO  [tone_alarm] notify neutral
+INFO  [logger] closed logfile, bytes written: 65578100
