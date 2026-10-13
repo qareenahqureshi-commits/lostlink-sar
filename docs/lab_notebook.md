@@ -92,3 +92,12 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
   - Lesson: the 10 % failure is a planning dead end, not lost localisation.
 - **Remaining failures (10–20 %):** trapped deep inside where nothing can be recognised and the drift rate cannot be learned; or turned back in time but landed ~9–10 m off. Next: no-progress watchdog in the return + clearing the old map when stuck.
 
+### 2026-10-13 (evening): Stage 5b — recovery when stuck + correction check
+
+- **Recovery when stuck** (return phase): < 1 m movement in 12 s → re-plan differently (switch direct ↔ breadcrumbs, aim 4 m further along the route); still stuck → clear the drifted map and re-map from 4 headings. Also re-plan when the path ends at the drone but the goal is elsewhere.
+- **Real flight 10 % with recovery:** got unstuck, but a wrong-wall match in a doorway (north corridor wall onto the south wall) shifted the belief 2.75 m south; searched the wrong room for 13 min; landed 9.1 m from home, 2 collisions.
+- **Correction check:** reject relocalisations larger than 2.5 σ + 0.5 m (counts towards the alarm); accept if the same shift repeats 3 times (within 0.5 m). Without the repeat rule, Stage 1 building at 20 % dropped from 2/10 to 0/10.
+- **Real flight 10 %, final code:** 2 rooms, alarm return, landed **0.78 m** from home, 0 collisions, drift rate learned 9.2–10 %, 1 look-alike rejected.
+- **Monte Carlo, final code (400 runs, `results/stage5/offline_v2`):** deep buildings Stage 5 safe return 100/100/90/80 % (was 100/100/50/40 %); collisions 0/0/10/0 %. No-decision baseline (also with recovery): 100/20/30/30 %, collisions 20–70 %. Stage 1 building unchanged: 100/100/100/20 %.
+- **Remaining:** 3 of 40 Stage 5 deep-building runs at 10–20 % fail (1 trapped, 2 landed 9–13 m off). Next: more real flights with the final code for error bars; then the paper.
+
