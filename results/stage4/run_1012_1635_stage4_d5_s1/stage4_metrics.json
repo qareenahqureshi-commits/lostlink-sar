@@ -1,0 +1,248 @@
+{
+  "policy": "stage4",
+  "outcome": "completed",
+  "waypoints_reached": 3,
+  "return_reason": "drift",
+  "relocalisations": 47,
+  "r_hat_prior": 0.05,
+  "r_hat_final": 0.05,
+  "vio_drift_final_m": 3.159,
+  "px4_estimate_error_final_m": 2.85,
+  "corrected_estimate_error_final_m": 0.58,
+  "true_landing_ne_m": [
+    0.33,
+    -0.4
+  ],
+  "true_distance_from_home_m": 0.52,
+  "returned_within_budget": true,
+  "impacts": 0,
+  "min_clearance_m": 0.79,
+  "s_denied_m": 63.6,
+  "events": [
+    [
+      34.5,
+      "reached wp 1"
+    ],
+    [
+      46.8,
+      "GPS lost"
+    ],
+    [
+      54.5,
+      "anchor map closed after 4.0 m without GPS"
+    ],
+    [
+      54.5,
+      "relocalised: shift 0.00 m (score 1.00)"
+    ],
+    [
+      55.6,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      56.7,
+      "relocalised: shift 0.00 m (score 0.93)"
+    ],
+    [
+      57.5,
+      "reached wp 2"
+    ],
+    [
+      57.8,
+      "relocalised: shift 0.00 m (score 0.87)"
+    ],
+    [
+      58.8,
+      "relocalised: shift 0.25 m (score 0.58)"
+    ],
+    [
+      95.5,
+      "reached wp 3"
+    ],
+    [
+      95.5,
+      "return: drift (after wp 3/5)"
+    ],
+    [
+      114.3,
+      "relocalised: shift 1.12 m (score 0.58)"
+    ],
+    [
+      115.3,
+      "relocalised: shift 0.00 m (score 0.59)"
+    ],
+    [
+      116.5,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      117.7,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      119.9,
+      "relocalised: shift 0.25 m (score 0.73)"
+    ],
+    [
+      120.9,
+      "relocalised: shift 0.00 m (score 0.76)"
+    ],
+    [
+      121.9,
+      "relocalised: shift 0.00 m (score 0.81)"
+    ],
+    [
+      123.1,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      124.2,
+      "relocalised: shift 0.00 m (score 0.86)"
+    ],
+    [
+      125.2,
+      "relocalised: shift 0.25 m (score 0.91)"
+    ],
+    [
+      126.3,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      127.3,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      128.3,
+      "relocalised: shift 0.00 m (score 0.88)"
+    ],
+    [
+      129.4,
+      "relocalised: shift 0.00 m (score 0.88)"
+    ],
+    [
+      130.4,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      131.6,
+      "relocalised: shift 0.25 m (score 0.90)"
+    ],
+    [
+      132.6,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      133.8,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      134.8,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      135.8,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      137.0,
+      "relocalised: shift 0.25 m (score 0.93)"
+    ],
+    [
+      137.0,
+      "at exit"
+    ],
+    [
+      138.0,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      139.3,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      151.4,
+      "relocalised: shift 0.56 m (score 0.57)"
+    ],
+    [
+      152.4,
+      "relocalised: shift 0.25 m (score 0.69)"
+    ],
+    [
+      153.6,
+      "relocalised: shift 0.00 m (score 0.71)"
+    ],
+    [
+      154.7,
+      "relocalised: shift 0.00 m (score 0.74)"
+    ],
+    [
+      155.3,
+      "no progress: following breadcrumbs"
+    ],
+    [
+      155.9,
+      "relocalised: shift 0.00 m (score 0.82)"
+    ],
+    [
+      157.0,
+      "relocalised: shift 0.00 m (score 0.81)"
+    ],
+    [
+      158.2,
+      "relocalised: shift 0.25 m (score 0.82)"
+    ],
+    [
+      159.2,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      160.3,
+      "relocalised: shift 0.00 m (score 0.87)"
+    ],
+    [
+      161.3,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      162.5,
+      "relocalised: shift 0.00 m (score 0.98)"
+    ],
+    [
+      163.7,
+      "relocalised: shift 0.00 m (score 0.99)"
+    ],
+    [
+      164.7,
+      "relocalised: shift 0.00 m (score 0.98)"
+    ],
+    [
+      165.9,
+      "relocalised: shift 0.00 m (score 0.97)"
+    ],
+    [
+      166.9,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      168.0,
+      "relocalised: shift 0.00 m (score 0.85)"
+    ],
+    [
+      169.0,
+      "relocalised: shift 0.00 m (score 0.87)"
+    ],
+    [
+      170.3,
+      "relocalised: shift 0.00 m (score 0.86)"
+    ],
+    [
+      171.5,
+      "relocalised: shift 0.00 m (score 0.86)"
+    ],
+    [
+      177.5,
+      "home (own estimate)"
+    ]
+  ],
+  "corrected_error_max_m": 1.44
+}

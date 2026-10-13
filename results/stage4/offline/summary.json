@@ -1,0 +1,254 @@
+{
+ "stage4|0.05": {
+  "2": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 4.0,
+   "landing_err_median_m": 0.54,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.78
+  },
+  "5": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 4.6,
+   "landing_err_median_m": 0.61,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.75
+  },
+  "10": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 4.2,
+   "landing_err_median_m": 0.71,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.75
+  },
+  "20": {
+   "n": 10,
+   "returned_ok_pct": 40.0,
+   "home_by_estimate_pct": 70.0,
+   "timeouts_pct": 30.0,
+   "waypoints_mean": 2.9,
+   "landing_err_median_m": 13.26,
+   "runs_with_collision_pct": 10.0,
+   "min_clearance_median_m": 0.66
+  }
+ },
+ "stage3|0.05": {
+  "2": {
+   "n": 10,
+   "returned_ok_pct": 40.0,
+   "home_by_estimate_pct": 50.0,
+   "timeouts_pct": 50.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 10.09,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.76
+  },
+  "5": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 40.0,
+   "timeouts_pct": 60.0,
+   "waypoints_mean": 4.9,
+   "landing_err_median_m": 21.45,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.61
+  },
+  "10": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 30.0,
+   "timeouts_pct": 70.0,
+   "waypoints_mean": 4.7,
+   "landing_err_median_m": 22.0,
+   "runs_with_collision_pct": 30.0,
+   "min_clearance_median_m": 0.48
+  },
+  "20": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 0.0,
+   "timeouts_pct": 100.0,
+   "waypoints_mean": 3.5,
+   "landing_err_median_m": 32.76,
+   "runs_with_collision_pct": 50.0,
+   "min_clearance_median_m": 0.31
+  }
+ },
+ "rtl_link|0.05": {
+  "2": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 2.0,
+   "landing_err_median_m": 1.08,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.99
+  },
+  "5": {
+   "n": 10,
+   "returned_ok_pct": 20.0,
+   "home_by_estimate_pct": 50.0,
+   "timeouts_pct": 50.0,
+   "waypoints_mean": 2.0,
+   "landing_err_median_m": 16.46,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.96
+  },
+  "10": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 50.0,
+   "timeouts_pct": 50.0,
+   "waypoints_mean": 2.0,
+   "landing_err_median_m": 16.71,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.89
+  },
+  "20": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 50.0,
+   "timeouts_pct": 50.0,
+   "waypoints_mean": 2.0,
+   "landing_err_median_m": 19.27,
+   "runs_with_collision_pct": 10.0,
+   "min_clearance_median_m": 0.6
+  }
+ },
+ "map|0.05": {
+  "2": {
+   "n": 10,
+   "returned_ok_pct": 90.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 1.56,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.72
+  },
+  "5": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 90.0,
+   "timeouts_pct": 10.0,
+   "waypoints_mean": 4.9,
+   "landing_err_median_m": 3.85,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.78
+  },
+  "10": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 50.0,
+   "timeouts_pct": 50.0,
+   "waypoints_mean": 4.8,
+   "landing_err_median_m": 13.52,
+   "runs_with_collision_pct": 40.0,
+   "min_clearance_median_m": 0.52
+  },
+  "20": {
+   "n": 10,
+   "returned_ok_pct": 0.0,
+   "home_by_estimate_pct": 10.0,
+   "timeouts_pct": 90.0,
+   "waypoints_mean": 3.2,
+   "landing_err_median_m": 30.31,
+   "runs_with_collision_pct": 30.0,
+   "min_clearance_median_m": 0.44
+  }
+ },
+ "map_reloc|0.05": {
+  "2": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 0.54,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.71
+  },
+  "5": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 0.64,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.7
+  },
+  "10": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 0.82,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.66
+  },
+  "20": {
+   "n": 10,
+   "returned_ok_pct": 10.0,
+   "home_by_estimate_pct": 40.0,
+   "timeouts_pct": 60.0,
+   "waypoints_mean": 3.7,
+   "landing_err_median_m": 31.68,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.58
+  }
+ },
+ "stage4|0.02": {
+  "2": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 0.6,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.73
+  },
+  "5": {
+   "n": 10,
+   "returned_ok_pct": 100.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 5.0,
+   "landing_err_median_m": 0.64,
+   "runs_with_collision_pct": 0.0,
+   "min_clearance_median_m": 0.63
+  },
+  "10": {
+   "n": 10,
+   "returned_ok_pct": 90.0,
+   "home_by_estimate_pct": 100.0,
+   "timeouts_pct": 0.0,
+   "waypoints_mean": 4.5,
+   "landing_err_median_m": 0.85,
+   "runs_with_collision_pct": 20.0,
+   "min_clearance_median_m": 0.47
+  },
+  "20": {
+   "n": 10,
+   "returned_ok_pct": 10.0,
+   "home_by_estimate_pct": 40.0,
+   "timeouts_pct": 60.0,
+   "waypoints_mean": 3.2,
+   "landing_err_median_m": 28.82,
+   "runs_with_collision_pct": 40.0,
+   "min_clearance_median_m": 0.23
+  }
+ }
+}

@@ -1,0 +1,20 @@
+[INFO] [1791808337.668494713] [lostlink_sim_link]: sim link: wall model, jam_link=True
+[WARN] [1791808337.938151111] [lostlink_sim_link]: LINK OK (rssi -20 dBm, walls 0, jammed=False)
+[WARN] [1791808403.887414962] [lostlink_sim_link]: LINK LOST (rssi -43 dBm, walls 0, jammed=True)
+Traceback (most recent call last):
+  File "/home/kareena/lostlink_ws/install/lostlink_planner/lib/lostlink_planner/sim_link", line 33, in <module>
+    sys.exit(load_entry_point('lostlink-planner', 'console_scripts', 'sim_link')())
+  File "/home/kareena/lostlink_ws/build/lostlink_planner/lostlink_planner/sim_link_node.py", line 65, in main
+    rclpy.spin(n)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
+    executor.spin_once()
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
+    self._spin_once_impl(timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 797, in _spin_once_impl
+    handler, entity, node = self.wait_for_ready_callbacks(timeout_sec=timeout_sec)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 780, in wait_for_ready_callbacks
+    return next(self._cb_iter)
+  File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 653, in _wait_for_ready_callbacks
+    wait_set = _rclpy.WaitSet(
+rclpy._rclpy_pybind11.RCLError: failed to initialize wait set: the given context is not valid, either rcl_init() was not called or rcl_shutdown() was called., at ./src/rcl/wait.c:130
+[ros2run]: Process exited with failure 1
