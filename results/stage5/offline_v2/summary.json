@@ -1,0 +1,386 @@
+{
+ "stage1/rtl_link|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 1.01,
+  "waypoints_mean": 2.0
+ },
+ "stage1/rtl_link|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 60,
+  "timeouts_pct": 10,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 1.96,
+  "waypoints_mean": 2.0
+ },
+ "stage1/rtl_link|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 50,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 16.96,
+  "waypoints_mean": 2.0
+ },
+ "stage1/rtl_link|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 50,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 18.89,
+  "waypoints_mean": 2.0
+ },
+ "buildings/rtl_link|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.98,
+  "waypoints_mean": 3.2,
+  "rooms_mean": 0.7,
+  "rooms_frac_pct": 7,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 70
+ },
+ "buildings/rtl_link|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 90,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 1.77,
+  "waypoints_mean": 3.1,
+  "rooms_mean": 0.5,
+  "rooms_frac_pct": 5,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 50
+ },
+ "buildings/rtl_link|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 20,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 3.29,
+  "waypoints_mean": 3.2,
+  "rooms_mean": 0.5,
+  "rooms_frac_pct": 5,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 0
+ },
+ "buildings/rtl_link|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 90,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 19.0,
+  "waypoints_mean": 3.1,
+  "rooms_mean": 0.0,
+  "rooms_frac_pct": 0,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 0
+ },
+ "stage1/stage3|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 50,
+  "timeouts_pct": 40,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 2.04,
+  "waypoints_mean": 5.0
+ },
+ "stage1/stage3|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 50,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 11.89,
+  "waypoints_mean": 5.0
+ },
+ "stage1/stage3|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 50,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 12.88,
+  "waypoints_mean": 5.0
+ },
+ "stage1/stage3|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 80,
+  "collision_runs_pct": 10,
+  "landing_err_median_m": 26.07,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 90,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 1.58,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 3.71,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 20,
+  "landing_err_median_m": 8.46,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 60,
+  "collision_runs_pct": 20,
+  "landing_err_median_m": 25.68,
+  "waypoints_mean": 5.0
+ },
+ "buildings/stage3|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 100,
+  "collision_runs_pct": 20,
+  "landing_err_median_m": 53.97,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 6.1,
+  "rooms_frac_pct": 61,
+  "survivor_pct": 70,
+  "safe_and_useful_pct": 0
+ },
+ "buildings/stage3|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 90,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 31.09,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 2.2,
+  "rooms_frac_pct": 22,
+  "survivor_pct": 10,
+  "safe_and_useful_pct": 0
+ },
+ "buildings/stage3|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 100,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 21.5,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 0.8,
+  "rooms_frac_pct": 8,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 0
+ },
+ "buildings/stage3|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 90,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 21.95,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 0.5,
+  "rooms_frac_pct": 5,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 0
+ },
+ "stage1/stage4|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.55,
+  "waypoints_mean": 4.8
+ },
+ "stage1/stage4|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.56,
+  "waypoints_mean": 4.8
+ },
+ "stage1/stage4|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.75,
+  "waypoints_mean": 5.0
+ },
+ "stage1/stage4|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 20,
+  "timeouts_pct": 30,
+  "collision_runs_pct": 10,
+  "landing_err_median_m": 14.32,
+  "waypoints_mean": 3.4
+ },
+ "stage1/stage4|0.02/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.54,
+  "waypoints_mean": 5.0
+ },
+ "stage1/stage4|0.02/5": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.64,
+  "waypoints_mean": 5.0
+ },
+ "stage1/stage4|0.02/10": {
+  "n": 10,
+  "returned_ok_pct": 90,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 20,
+  "landing_err_median_m": 0.83,
+  "waypoints_mean": 4.7
+ },
+ "stage1/stage4|0.02/20": {
+  "n": 10,
+  "returned_ok_pct": 10,
+  "timeouts_pct": 40,
+  "collision_runs_pct": 60,
+  "landing_err_median_m": 18.83,
+  "waypoints_mean": 4.1
+ },
+ "buildings/stage4|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.55,
+  "waypoints_mean": 11.0,
+  "rooms_mean": 4.1,
+  "rooms_frac_pct": 40,
+  "survivor_pct": 50,
+  "safe_and_useful_pct": 100
+ },
+ "buildings/stage4|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.61,
+  "waypoints_mean": 9.2,
+  "rooms_mean": 3.1,
+  "rooms_frac_pct": 31,
+  "survivor_pct": 30,
+  "safe_and_useful_pct": 100
+ },
+ "buildings/stage4|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 80,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 1.64,
+  "waypoints_mean": 7.7,
+  "rooms_mean": 0.7,
+  "rooms_frac_pct": 7,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 50
+ },
+ "buildings/stage4|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 90,
+  "timeouts_pct": 10,
+  "collision_runs_pct": 10,
+  "landing_err_median_m": 0.81,
+  "waypoints_mean": 8.6,
+  "rooms_mean": 1.6,
+  "rooms_frac_pct": 16,
+  "survivor_pct": 0,
+  "safe_and_useful_pct": 90
+ },
+ "stage1/map_reloc|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.56,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map_reloc|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.58,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map_reloc|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 0,
+  "landing_err_median_m": 0.75,
+  "waypoints_mean": 5.0
+ },
+ "stage1/map_reloc|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 0,
+  "timeouts_pct": 30,
+  "collision_runs_pct": 30,
+  "landing_err_median_m": 17.38,
+  "waypoints_mean": 5.0
+ },
+ "buildings/map_reloc|0.05/2": {
+  "n": 10,
+  "returned_ok_pct": 100,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 20,
+  "landing_err_median_m": 0.53,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 7.2,
+  "rooms_frac_pct": 71,
+  "survivor_pct": 70,
+  "safe_and_useful_pct": 100
+ },
+ "buildings/map_reloc|0.05/5": {
+  "n": 10,
+  "returned_ok_pct": 20,
+  "timeouts_pct": 0,
+  "collision_runs_pct": 30,
+  "landing_err_median_m": 10.55,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 5.4,
+  "rooms_frac_pct": 54,
+  "survivor_pct": 50,
+  "safe_and_useful_pct": 20
+ },
+ "buildings/map_reloc|0.05/20": {
+  "n": 10,
+  "returned_ok_pct": 30,
+  "timeouts_pct": 60,
+  "collision_runs_pct": 70,
+  "landing_err_median_m": 36.41,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 1.5,
+  "rooms_frac_pct": 15,
+  "survivor_pct": 20,
+  "safe_and_useful_pct": 30
+ },
+ "buildings/map_reloc|0.05/10": {
+  "n": 10,
+  "returned_ok_pct": 30,
+  "timeouts_pct": 40,
+  "collision_runs_pct": 40,
+  "landing_err_median_m": 16.24,
+  "waypoints_mean": 22.2,
+  "rooms_mean": 3.4,
+  "rooms_frac_pct": 34,
+  "survivor_pct": 20,
+  "safe_and_useful_pct": 30
+ }
+}
