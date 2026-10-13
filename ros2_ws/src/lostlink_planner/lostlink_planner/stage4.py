@@ -343,7 +343,7 @@ class LostLinkMission:
         self.stuck_s, self.stuck_move_m, self.rescan_dwell_s = 12.0, 1.0, 2.5
         self._mv_p, self._mv_t, self._stuck_n, self._rescan_t0, self._rescan_yaw0, self._push_far = None, 0.0, 0, None, 0.0, False
         self.n_map_clears, self.n_stuck = 0, 0
-        self.reloc_gate, self.n_gated = 2.5, 0                 # Stage 5b: innovation gate (x sigma)
+        self.reloc_gate, self.n_gated, self._gated_run = 2.5, 0, []   # Stage 5b: innovation gate (x sigma)
         self.r_hat, self.sigma_anchor, self.e_tol = r_hat, sigma_anchor, e_tol
         self.wps = [np.asarray(w, float) for w in waypoints_ne]
         self.k = 0
@@ -424,9 +424,21 @@ class LostLinkMission:
         # a look-alike (a corridor wall matched onto the opposite wall, a mirror-image room) than drift.
         # The recognition alarm raises the expected error, which then lets large corrections through.
         gated = bool(good and self.reloc_gate and math.hypot(dn, de) > self.reloc_gate * sig + 0.5)
-        if gated:                                        # a gated match also counts towards the alarm
-            good = False
-            self.n_gated += 1
+        if gated:
+            # ... unless the same large shift keeps coming back: 3 gated matches in a row that agree
+            # within 0.5 m are treated as real drift (a look-alike rarely repeats from different views)
+            g = self._gated_run
+            if g and math.hypot(dn - g[-1][0], de - g[-1][1]) <= 0.5:
+                g.append((dn, de))
+            else:
+                g[:] = [(dn, de)]
+            if len(g) >= 3:
+                gated, g[:] = False, []
+            else:
+                good = False                             # a gated match also counts towards the alarm
+                self.n_gated += 1
+        elif good:
+            self._gated_run = []
         self.reloc_log.append((round(t, 1), round(dn, 2), round(de, 2), round(sc, 3), round(s0, 3), bool(unique), bool(good)))
         if not good:
             # count it as a failure only if most of what we see now lies within the search radius
