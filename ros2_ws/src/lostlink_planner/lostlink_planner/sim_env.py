@@ -29,6 +29,28 @@ def load_boxes(make_world_py):
     return out
 
 
+def boxes_from_module(w):
+    """Same as load_boxes, from an already-loaded world object (e.g. a Stage 5 generated building)."""
+    out = []
+    for name, (e, n), (sx, sy, sz), yaw_deg, col, collides in w.BOXES:
+        if not collides:
+            continue
+        a = math.radians(yaw_deg)
+        ax1 = np.array([math.sin(a), math.cos(a)]); ax2 = np.array([math.cos(a), -math.sin(a)])
+        out.append((np.array([n, e]), ax1, ax2, sx / 2, sy / 2, name))
+    return out
+
+
+def load_world_any(path):
+    """make_stage1.py-style module, or a Stage 5 spec .json -> list of boxes."""
+    if path.endswith(".json"):
+        import json, types
+        sp = json.load(open(path))
+        w = types.SimpleNamespace(BOXES=[(n, tuple(c), tuple(s), y, col, coll) for n, c, s, y, col, coll in sp["BOXES"]])
+        return boxes_from_module(w)
+    return load_boxes(path)
+
+
 def segment_hits_box(a, b, box):
     c, ax1, ax2, h1, h2, _ = box
     A = np.array([(a - c) @ ax1, (a - c) @ ax2]); B = np.array([(b - c) @ ax1, (b - c) @ ax2])

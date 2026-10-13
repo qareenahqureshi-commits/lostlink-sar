@@ -93,7 +93,6 @@ The mission node sends PX4's own failure-injection command (`VEHICLE_CMD_INJECT_
 4. **Still mostly fallback:** in the real run only ~10 % of frames could be time-matched (clock messages too sparse); the rest used the latest pose. Safe (Stage 2 behaviour), but the smear fix is not done yet — see limitations.
 5. **VIO node crashed at start:** ROS2 refused `drift_pct:=2` (integer) for a float parameter → script now always passes floats.
 6. **Leftover Gazebo blocked the next start** (`gazebo already running`) → run script now force-kills and verifies all old PX4/Gazebo/node processes.
-7. **Stale launcher on WSL:** Windows-side edits to a script sometimes are not seen immediately inside WSL → use new file names for one-off launchers.
 
 ## How to run
 

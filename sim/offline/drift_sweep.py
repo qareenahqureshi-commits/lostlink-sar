@@ -1,6 +1,8 @@
 import sys, math, numpy as np
-REPO='/mnt/user-data/outputs/lostlink-sar'
-sys.path.insert(0,REPO+'/sim/offline'); sys.argv=['x']
+import os
+REPO=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+OUT=os.path.join(REPO,'results','stage3','offline','traj'); os.makedirs(OUT, exist_ok=True)
+sys.path.insert(0,REPO+'/sim/offline'); sys.path.insert(0,REPO+'/ros2_ws/src/lostlink_planner'); sys.argv=['x']
 import offline_sim as S
 from lostlink_planner import core
 w=S.load_world(); world=S.World(w); wps=[(n,e) for (e,n) in w.WAYPOINTS]
@@ -23,7 +25,7 @@ def run(drift_pct, seed, gps_off_east=14.0):
         h=world.collides(pt)
         if h and h!=last: hits.append(h)
         last=h; t+=0.1; traj.append((pt[0],pt[1],pe[0],pe[1]))
-    np.save(f'/tmp/claude-0/s3/traj_{drift_pct}_{seed}.npy', np.array(traj))
+    np.save(os.path.join(OUT, f'traj_{drift_pct}_{seed}.npy'), np.array(traj))
     return mf.done, len(hits), sorted(set(hits)), round(float(np.linalg.norm(d)),2), np.round(pt[:2],2).tolist()
 for dp in [float(x) for x in sys.argv_dp.split(',')] if hasattr(sys,'argv_dp') else [2,5,10,20]:
     for s in range(3):

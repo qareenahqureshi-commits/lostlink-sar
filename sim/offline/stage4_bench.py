@@ -18,35 +18,75 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(REPO, "ros2_ws", "src", "lostlink_planner"))
 import offline_sim as S                                   # noqa: E402
+sys.path.insert(0, os.path.join(REPO, 'sim', 'worlds'))
+import make_building as MB                                # noqa: E402
 from lostlink_planner import core, stage4, sim_env        # noqa: E402
+
+# Speed-up for the offline bench only: SciPy's exact Euclidean distance transform gives the same
+# capped distance field as core.distance_field (checked to 5e-8 m in Stage 2), ~20x faster.
+try:
+    from scipy.ndimage import distance_transform_edt as _edt
+
+    def _fast_distance_field(occ, res, max_dist=2.0):
+        if not occ.any():
+            return np.full(occ.shape, max_dist, dtype=np.float32)
+        return np.minimum(_edt(~occ) * res, max_dist).astype(np.float32)
+    core.distance_field = stage4.distance_field = _fast_distance_field
+except ImportError:
+    pass
 
 POLICIES = list(stage4.LostLinkMission.POLICIES)
 
 
-def clearance(world, p):
-    """True horizontal distance (m) from p (n, e) to the nearest obstacle surface."""
+def clearance(world, p, alt=3.0, radius=0.3):
+    """True horizontal distance (m) from p (n, e) to the nearest obstacle surface that reaches the
+    drone's altitude (low debris the drone flies over does not count)."""
     best = 1e9
     for c, ax1, ax2, h1, h2, H, _ in world.boxes:
+        if H < alt - radius:
+            continue
         rel = np.array(p[:2]) - c
         dx, dy = max(abs(rel @ ax1) - h1, 0.0), max(abs(rel @ ax2) - h2, 0.0)
         best = min(best, math.hypot(dx, dy))
     for c, r, H, _ in world.cyls:
+        if H < alt - radius:
+            continue
         best = min(best, float(np.linalg.norm(np.array(p[:2]) - c)) - r)
     return best
 
 
-def run(policy, drift_pct, seed, r_hat=0.05, budget=2.0, gps_off_east=14.0, tmax=400.0, keep_traj=False, jam_link=True):
+def run(policy, drift_pct, seed, r_hat=0.05, budget=2.0, gps_off_east=14.0, tmax=None, keep_traj=False, jam_link=True,
+        world=None, rate_estimator="baseline", wall_limit_s=None):
     """jam_link: the jammer that takes GPS at the door also takes the radio link (Lost-Link scenario)."""
-    w = S.load_world(); world = S.World(w)
+    mk = None
+    if world is None:                                    # the Stage 1-4 building
+        w = S.load_world()
+        link = sim_env.LinkModel(sim_env.load_boxes(os.path.join(REPO, "sim", "worlds", "make_stage1.py")))
+    else:                                                # Stage 5: generated building (seed or spec path)
+        w = MB.load(world); mk = MB.map_kwargs(w.spec)
+        link = sim_env.LinkModel(sim_env.boxes_from_module(w))
+        tmax = tmax or (150.0 + 4.0 * float(np.sum(np.linalg.norm(np.diff(np.array([(0, 0)] + list(w.WAYPOINTS) + [(0, 0)]), axis=0), axis=1))))
+    world_ = world
+    tmax = tmax or 400.0
+    world = S.World(w)
     wps = [(n, e) for (e, n) in w.WAYPOINTS]
-    link = sim_env.LinkModel(sim_env.load_boxes(os.path.join(REPO, "sim", "worlds", "make_stage1.py")))
     rng = np.random.default_rng(seed)
     proj = core.DepthProjector(stride=8)
-    m = stage4.LostLinkMission(wps, policy=policy, r_hat=r_hat, budget_m=budget)
+    m = stage4.LostLinkMission(wps, policy=policy, r_hat=r_hat, budget_m=budget, map_kwargs=mk, rate_estimator=rate_estimator)
     pt = np.array([0.0, 0.0, -3.0]); yaw = 0.0; d = np.zeros(2); ang = rng.uniform(0, 2 * np.pi)
     dt, t, gps = 0.1, 0.0, True
     hits, last, min_cl, traj, link_lost_at = [], None, 1e9, [], None
+    room_pts = visited = None
+    if hasattr(w, "spec"):
+        room_pts = np.array([wps[i] for i in w.spec["room_waypoints"]], float)
+        visited = np.zeros(len(room_pts), bool)
+        sv_idx = w.spec["room_waypoints"].index(w.spec["survivor_wp"])
+    import time as _time
+    _w0, capped = _time.time(), False
     while t < tmax and not m.done:
+        if wall_limit_s and _time.time() - _w0 > wall_limit_s:      # compute-time cap (sweeps only)
+            capped = True
+            break
         if gps and pt[1] > gps_off_east:
             gps = False
         pe = pt.copy(); pe[:2] += d
@@ -71,14 +111,21 @@ def run(policy, drift_pct, seed, r_hat=0.05, budget=2.0, gps_off_east=14.0, tmax
             hits.append(h)
         last = h
         if 1.0 < -pt[2]:
-            min_cl = min(min_cl, clearance(world, pt))
+            min_cl = min(min_cl, clearance(world, pt, alt=-pt[2]))
+        if room_pts is not None:                         # honest coverage: rooms really entered (truth)
+            dd = np.linalg.norm(room_pts - pt[:2], axis=1)
+            visited |= dd < 1.5
         if keep_traj:
             traj.append((t, pt[0], pt[1], m.p[0], m.p[1], info.get("mode", ""), m.state, lk, m.sigma_pred))
         t += dt
     res = {
         "policy": policy, "drift_pct": drift_pct, "seed": seed, "r_hat": r_hat, "budget_m": budget,
         "home_by_own_estimate": bool(m.done), "timed_out": not m.done,
-        "waypoints_reached": m.k, "n_waypoints": len(wps),
+        "waypoints_reached": m.k, "n_waypoints": len(wps), "world": world_, "rate_estimator": rate_estimator,
+        "r_hat_final": round(m.dec.r_hat, 4), "skipped_wps": len(m.skipped), "stuck_events": getattr(m, "n_stuck", 0), "map_clears": getattr(m, "n_map_clears", 0), "relocs_gated": getattr(m, "n_gated", 0), "compute_capped": capped,
+        "rooms_total": int(len(room_pts)) if room_pts is not None else None,
+        "rooms_searched": int(visited.sum()) if room_pts is not None else None,
+        "survivor_found": bool(visited[sv_idx]) if room_pts is not None else None,
         "return_reason": m.return_reason,
         "true_landing_error_m": round(float(np.linalg.norm(pt[:2])), 2),
         "returned_ok": bool(m.done and np.linalg.norm(pt[:2]) <= budget),
@@ -129,8 +176,10 @@ def plot_run(r, path):
     sys.path.insert(0, os.path.join(REPO, "sim", "scripts"))
     from stage2_report import world as w2, draw_world
     T = r["_traj"]; m = r["_mission"]
-    fig, ax = plt.subplots(figsize=(10, 5.6), dpi=140)
-    draw_world(ax, w2())
+    wm = MB.load(r["world"]) if r.get("world") is not None else w2()
+    (ex0, ex1), (ny0, ny1) = wm.spec["bounds_en"] if hasattr(wm, "spec") else ((-4, 48), (-12, 12.5))
+    fig, ax = plt.subplots(figsize=(11, max(4.0, 11 * (ny1 - ny0) / (ex1 - ex0) + 1.2)), dpi=140)
+    draw_world(ax, wm)
     occ = m.grid.occupied; ii, jj = np.nonzero(occ)
     ax.scatter(m.grid.e0 + (jj + .5) * m.grid.res, m.grid.n0 + (ii + .5) * m.grid.res, s=1.2, c="#1baf7a",
                alpha=.6, label="map in use at the end")
@@ -141,9 +190,9 @@ def plot_run(r, path):
     if lost:
         ax.plot(A[lost, 1], A[lost, 0], ".", color="#b00", ms=1.5, label="radio link lost")
     ax.plot(A[-1, 1], A[-1, 0], "X", color="#2a78d6", ms=10)
-    ax.set_aspect("equal"); ax.set_xlim(-4, 48); ax.set_ylim(-12, 12.5); ax.grid(alpha=.2)
+    ax.set_aspect("equal"); ax.set_xlim(ex0, ex1); ax.set_ylim(ny0, ny1); ax.grid(alpha=.2)
     ax.set_xlabel("East (m)"); ax.set_ylabel("North (m)")
-    ax.set_title(f"{r['policy']} | drift {r['drift_pct']}% | wp {r['waypoints_reached']}/{r['n_waypoints']} | "
+    ax.set_title(f"{'building ' + str(r['world']) + ' | ' if r.get('world') is not None else ''}{r['policy']} | drift {r['drift_pct']}% | wp {r['waypoints_reached']}/{r['n_waypoints']} | "
                  f"landed {r['true_landing_error_m']} m from home | {r['collisions']} collisions", fontsize=9.5)
     ax.legend(fontsize=7.5, loc="lower right", frameon=False)
     fig.tight_layout(); fig.savefig(path)

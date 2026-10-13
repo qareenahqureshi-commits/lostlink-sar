@@ -83,6 +83,9 @@ class AvoidMission(Node):
         self.declare_parameter("r_hat", 0.05)              # Stage 4: assumed VIO drift rate (prior)
         self.declare_parameter("budget_m", 2.0)            # Stage 4: acceptable landing error
         self.declare_parameter("capture_m", 3.0)           # Stage 4: max error at which the exit can still be recognised
+        self.declare_parameter("world_spec", "")           # Stage 5: generated building spec (.json) -> map extent
+        self.declare_parameter("max_yaw_rate", 0.25)       # Stage 5: skip depth frames while turning faster (rad/s); 0 = off
+        self.declare_parameter("land_timeout_s", 60.0)     # sim only: force-disarm if PX4 never detects the landing
         gp = lambda k: self.get_parameter(k).value
         self.alt, self.avoid = float(gp("alt")), bool(gp("avoid"))
         self.log_dir = gp("log_dir"); os.makedirs(self.log_dir, exist_ok=True)
@@ -93,10 +96,17 @@ class AvoidMission(Node):
         if self.policy == "stage2":
             self.mf = core.MissionFollower(wps, alt=self.alt, avoid=self.avoid, lookahead=float(gp("lookahead")))
         else:
+            mk = None
+            if gp("world_spec"):
+                sp = json.load(open(gp("world_spec")))
+                (e0, e1), (n0, n1) = sp["bounds_en"]
+                mk = {"n_range": (n0, n1), "e_range": (e0, e1), "res": 0.25}
             self.mf = Stage4Adapter(stage4.LostLinkMission(
                 wps, policy=self.policy, r_hat=float(gp("r_hat")), budget_m=float(gp("budget_m")),
-                capture_m=float(gp("capture_m")), lookahead=float(gp("lookahead"))))
+                capture_m=float(gp("capture_m")), lookahead=float(gp("lookahead")), map_kwargs=mk))
         self.link_ok, self.t_takeoff = True, None
+        self.max_yaw_rate, self.yaw_rate, self.n_gated = float(gp("max_yaw_rate")), 0.0, 0
+        self.land_timeout = float(gp("land_timeout_s"))
         self.create_subscription(Bool, "/lostlink/link_ok", lambda m: setattr(self, "link_ok", bool(m.data)), 10)
         self.proj = core.DepthProjector(stride=8, planar=bool(gp("planar_depth")))
         self.lock = threading.Lock()
@@ -175,6 +185,12 @@ class AvoidMission(Node):
             self.n_fallback += 1
             with self.lock:
                 pos, q = self.pos.copy(), list(self.q)
+        # Stage 5 motion gating: while the drone turns fast, a depth image placed with a slightly wrong
+        # pose paints walls up to ~1 m off (the time-sync limitation). Skip those frames; the camera
+        # sees the same scene again as soon as the turn ends.
+        if self.max_yaw_rate > 0 and abs(self.yaw_rate) > self.max_yaw_rate:
+            self.n_gated += 1
+            return
         pts = self.proj.to_world(img, pos, q)
         with self.lock:
             if hasattr(self.mf, "insert_points"):
@@ -189,6 +205,8 @@ class AvoidMission(Node):
             self.q = [m.q[0], m.q[1], m.q[2], m.q[3]]
         self.poses.add(m.timestamp_sample * 1e-6, self.pos, self.q)
         self.yaw = core.yaw_from_quat(self.q)
+        w = float(m.angular_velocity[2])
+        self.yaw_rate = w if np.isfinite(w) else 0.0
 
     def on_drift(self, m):
         self.vio_drift = float(m.data[2])
@@ -272,6 +290,11 @@ class AvoidMission(Node):
         elif self.state == "LAND":
             if self.tick % 20 == 0:
                 self.command(VehicleCommand.VEHICLE_CMD_NAV_LAND)
+            if self.land_timeout > 0 and el > self.land_timeout and self.tick % 40 == 0:
+                # sim only: with baro height after GPS loss PX4's land detector can hang on the ground
+                if self.tick % 400 == 0 or el < self.land_timeout + 2.5:
+                    self.get_logger().warn("landing not detected -> forced disarm (simulation only)")
+                self.command(VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM, 0.0, 21196.0)
             if not self.armed and el > 3:
                 self.set_state("DONE")
                 self.finish()
@@ -311,6 +334,7 @@ class AvoidMission(Node):
                      "reloc_log": m.reloc_log, "relocalisations": m.n_reloc, "corr_final": m.corr.round(3).tolist(),
                      "r_hat_prior": m.dec.r_prior, "r_hat_final": round(m.dec.r_hat, 4),
                      "s_denied_m": round(m.s, 1), "final_corrected_pos_ne": (self.pos[:2] + m.corr).round(2).tolist(),
+                     "skipped_wps": list(map(int, m.skipped)), "stuck_events": int(getattr(m, "n_stuck", 0)), "map_clears": int(getattr(m, "n_map_clears", 0)), "relocs_gated": int(getattr(m, "n_gated", 0)), "world_spec": self.get_parameter("world_spec").value,
                      "crumbs": np.round(np.array(m.crumbs.pts), 2).tolist() if m.crumbs.pts else []}
         lag = np.array(self.sync_lag) if self.sync_lag else np.array([np.nan])
         json.dump({"n0": self.mf.grid.n0, "e0": self.mf.grid.e0, "res": self.mf.grid.res,
@@ -320,7 +344,8 @@ class AvoidMission(Node):
                    "final_est_pos_ne": [round(float(self.pos[0]), 2), round(float(self.pos[1]), 2)],
                    "frames_time_synced": self.n_sync, "frames_fallback": self.n_fallback,
                    "depth_sync_lag_s_median": round(float(np.nanmedian(lag)), 3),
-                   "depth_sync_lag_s_p95": round(float(np.nanpercentile(lag, 95)), 3), **extra},
+                   "depth_sync_lag_s_p95": round(float(np.nanpercentile(lag, 95)), 3),
+                   "frames_gated_turning": self.n_gated, **extra},
                   open(os.path.join(self.log_dir, "planner_meta.json"), "w"), indent=2)
         self.get_logger().info("mission complete, logs saved")
         raise SystemExit

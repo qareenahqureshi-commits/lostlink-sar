@@ -38,6 +38,13 @@ Full background and references: [docs/01_concept.md](docs/01_concept.md)
 | 2 | ROS2 offboard node: depth camera → obstacle avoidance | ✅ Done — 0 collisions | [stage2_avoidance.md](docs/stage2_avoidance.md) |
 | 3 | GPS jammed at the doorway, drifting VIO | ✅ Done — 2 % drift: home but ~1.5 m off; 5 % drift: **trapped inside** (doorway vanished from its map). Drift breaks the way home before avoidance | [stage3_gps_denied.md](docs/stage3_gps_denied.md) |
 | 4 | GPS **and** radio link jammed: drift-aware map, relocalisation, return decision | ✅ Done — real flights land **0.35–0.89 m** from home at 5–10 % drift (Stage 3: trapped, 20.8 m); offline 100 % safe return up to 10 % drift (Stage 3: 0 %) | [stage4_return_decision.md](docs/stage4_return_decision.md) |
+| 5 | Random deep multi-room buildings (procedurally generated), better drift-rate learning, recognition alarm | ✅ Done (offline, 400 runs) — in deep buildings at 5 % drift the return decision lifts safe returns from 30 % to **100 %** with **0 collisions** (without it: 10 % of runs collide). Real flights: 0.64 m from home at 5 %; without the decision lost (25 m); at 10 % stuck at a dead end (fix next) | [stage5_random_buildings.md](docs/stage5_random_buildings.md) |
+
+**How results are produced.** Two kinds of simulation:
+- the **real simulator** (PX4 + Gazebo + ROS2) for full-stack flights;
+- a fast **offline bench** that runs the *same* planning code against a lightweight model of the building and depth camera, for statistics over hundreds of runs (`sim/offline/`).
+
+Each stage page says which numbers come from which.
 
 Day-by-day problems and fixes: [docs/lab_notebook.md](docs/lab_notebook.md)
 
@@ -64,6 +71,10 @@ bash sim/scripts/run_stage2.sh avoid
 bash sim/scripts/run_stage3.sh 5 0
 bash sim/scripts/run_stage4.sh stage4 5 0
 python3 sim/offline/stage4_bench.py --policy stage4 --drift 10 --seed 0 --plot out.png   # no simulator needed
+
+# Stage 5: random buildings (offline Monte Carlo, or a real flight in building 0)
+python3 sim/worlds/make_building.py --seed 0 --plot
+bash sim/scripts/run_stage5.sh stage4 5 0
 ```
 
 ## Repository layout

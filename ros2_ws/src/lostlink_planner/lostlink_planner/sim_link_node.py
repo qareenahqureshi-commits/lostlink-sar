@@ -8,14 +8,14 @@ If jam_link is true, the jammer that takes GPS also takes the link: link lost wh
 /lostlink/gps_denied is true (the "Lost-Link" scenario).
 
 Publishes /lostlink/link_ok (std_msgs/Bool) and /lostlink/link_rssi (Float32MultiArray [rssi_dbm, walls]) at 2 Hz.
-Params: world_py (path to make_stage1.py), jam_link (true), world (sar_building), model (x500_depth_0)
+Params: world_py (make_stage1.py or a Stage 5 building_<seed>.json), jam_link (true), world (sar_building), model (x500_depth_0)
 """
 import threading
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Bool, Float32MultiArray
 
-from lostlink_planner.sim_env import LinkModel, load_boxes
+from lostlink_planner.sim_env import LinkModel, load_world_any
 
 
 class SimLink(Node):
@@ -24,7 +24,7 @@ class SimLink(Node):
         for k, v in (("world_py", ""), ("jam_link", True), ("world", "sar_building"), ("model", "x500_depth_0")):
             self.declare_parameter(k, v)
         g = lambda k: self.get_parameter(k).value
-        self.link = LinkModel(load_boxes(g("world_py")))
+        self.link = LinkModel(load_world_any(g("world_py")))
         self.jam, self.model, self.denied = bool(g("jam_link")), g("model"), False
         self.ne, self.lock = None, threading.Lock()
         self.pub = self.create_publisher(Bool, "/lostlink/link_ok", 10)

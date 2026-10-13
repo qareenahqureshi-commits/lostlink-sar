@@ -28,8 +28,16 @@ def main():
     ap.add_argument("--log", required=True)
     ap.add_argument("--run-dir", required=True)
     ap.add_argument("--budget", type=float, default=2.0)
+    ap.add_argument("--world-spec", default=None, help="Stage 5: generated building spec (.json)")
     a = ap.parse_args()
-    w = world()
+    if a.world_spec:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "worlds"))
+        import make_building
+        w = make_building.load(a.world_spec)
+        (X0, X1), (Y0, Y1) = w.spec["bounds_en"]
+    else:
+        w = world()
+        (X0, X1), (Y0, Y1) = (-4, 48), (-12, 12.5)
     u = ULog(a.log, ["vehicle_local_position", "vehicle_local_position_groundtruth", "sensor_combined"])
     lp, gt, sc = topic(u, "vehicle_local_position"), topic(u, "vehicle_local_position_groundtruth"), topic(u, "sensor_combined")
     msgs = [(m.timestamp / 1e6, m.message) for m in ULog(a.log, []).logged_messages]
@@ -64,13 +72,20 @@ def main():
         "true_distance_from_home_m": round(float(np.hypot(*land_true)), 2),
         "returned_within_budget": bool(meta.get("outcome") == "completed" and np.hypot(*land_true) <= a.budget),
         "impacts": n_imp, "min_clearance_m": round(float(min(cl)), 2) if cl else None,
-        "s_denied_m": meta.get("s_denied_m"), "events": meta.get("events"),
+        "s_denied_m": meta.get("s_denied_m"), "skipped_wps": meta.get("skipped_wps"), "events": meta.get("events"),
     }
+    if a.world_spec:                       # honest coverage from the TRUE path: rooms really entered
+        sp = w.spec; WP = np.array(sp["WAYPOINTS"])
+        rooms = WP[sp["room_waypoints"]]                       # (east, north)
+        gpath = np.stack([gt["y"], gt["x"]], 1)[(galt > 1.0)]
+        seen = [bool(np.min(np.hypot(*(gpath - c).T)) < 1.5) for c in rooms] if len(gpath) else [False] * len(rooms)
+        m["rooms_searched"], m["rooms_total"] = int(sum(seen)), len(rooms)
+        m["survivor_found"] = bool(seen[sp["room_waypoints"].index(sp["survivor_wp"])])
     json.dump(m, open(os.path.join(a.run_dir, "stage4_metrics.json"), "w"), indent=2)
     print(json.dumps({k: v for k, v in m.items() if k != "events"}, indent=2))
 
     # ---- figure 1: paths
-    fig, ax = plt.subplots(figsize=(10, 5.8), dpi=150)
+    fig, ax = plt.subplots(figsize=(11, max(4.5, 11 * (Y1 - Y0) / (X1 - X0) + 1.4)), dpi=150)
     draw_world(ax, w)
     res, e0, n0 = meta["res"], meta["e0"], meta["n0"]
     for fn, col, lab, sz in (("anchor_hits.npy", ANCH, "anchor map (seen while position was trusted)", 1.0),
@@ -87,16 +102,17 @@ def main():
         ax.plot(ce[~link], cn[~link], ".", color=LOST, ms=1.2, label="radio link lost")
     if ret.any():
         k = int(np.argmax(ret)); ax.plot(ce[k], cn[k], "o", mfc="none", mec=INK, ms=11)
-        ax.annotate(f"turns back\n({meta.get('return_reason')})", (ce[k], cn[k]), xytext=(8, 10), textcoords="offset points", fontsize=8)
+        ax.annotate(f"turns back\n({meta.get('return_reason')})", (ce[k], cn[k]), xytext=(-14, -30), textcoords="offset points", fontsize=8)
     ax.axvline(14, color=MUTED, ls=":", lw=0.9); ax.text(14.2, 10.7, "GPS + link jammed", fontsize=7.5, color=MUTED)
     ax.plot(0, 0, "^", color=INK, ms=9)
     ax.plot(land_true[1], land_true[0], "X", color=TRUE, ms=10)
     ax.annotate(f"landed {m['true_distance_from_home_m']} m from home", (land_true[1], land_true[0]),
                 xytext=(10, -22), textcoords="offset points", fontsize=8, arrowprops=dict(arrowstyle="->", lw=0.6))
-    ax.set_aspect("equal"); ax.set_xlim(-4, 48); ax.set_ylim(-12, 12.5); ax.grid(alpha=.2)
+    ax.set_aspect("equal"); ax.set_xlim(X0, X1); ax.set_ylim(Y0, Y1); ax.grid(alpha=.2)
     ax.set_xlabel("East (m)"); ax.set_ylabel("North (m)")
-    ax.set_title(f"Stage 4 [{meta.get('policy')}]: {meta.get('final_vio_drift_m')} m VIO drift, {meta.get('relocalisations')} relocalisations, "
-                 f"waypoints {meta.get('waypoints_reached')}/5, {n_imp} collisions", fontsize=10)
+    n_wp = len(w.spec["WAYPOINTS"]) if a.world_spec else 5
+    ax.set_title(f"{'Stage 5' if a.world_spec else 'Stage 4'} [{meta.get('policy')}]: {meta.get('final_vio_drift_m')} m VIO drift, "
+                 f"{meta.get('relocalisations')} relocalisations, waypoints {meta.get('waypoints_reached')}/{n_wp}, {n_imp} collisions", fontsize=10)
     ax.legend(fontsize=7, loc="lower right", frameon=False)
     fig.tight_layout(); fig.savefig(os.path.join(a.run_dir, "stage4_paths.png"))
 

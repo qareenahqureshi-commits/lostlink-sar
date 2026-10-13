@@ -11,7 +11,12 @@ export PYTHONDONTWRITEBYTECODE=1
 B="$PX4/build/px4_sitl_default/bin"; P(){ ( cd "$PX4/build/px4_sitl_default/rootfs" && "$B/px4-$1" "${@:2}" ); }
 
 echo "== clean start (drift ${DRIFT}% seed ${SEED}, GPS jammed at East > ${DENY} m) =="
-pkill -f 'bin/px4'; pkill -f 'gz sim'; pkill -f MicroXRCEAgent; pkill -f 'lostlink_planner/sim_vio'; pkill -f 'lostlink_planner/avoid_mission'; sleep 3
+for i in 1 2 3 4 5; do
+  pkill -9 -f 'bin/px4'; pkill -9 -f 'gz sim'; pkill -9 -f MicroXRCEAgent; pkill -9 -f 'lib/lostlink_planner/'
+  sleep 2; pgrep -f 'gz sim|bin/px4|lib/lostlink_planner/' > /dev/null || break
+done
+pgrep -af 'gz sim|bin/px4|lib/lostlink_planner/' && echo "WARNING: old processes still alive" || echo "clean"
+sleep 2
 python3 "$REPO/sim/worlds/make_stage1.py" --px4 "$PX4" > /dev/null
 touch "$RUN/.start"
 export PX4_GZ_FOLLOW_OFFSET_X=-7 PX4_GZ_FOLLOW_OFFSET_Y=-7 PX4_GZ_FOLLOW_OFFSET_Z=6

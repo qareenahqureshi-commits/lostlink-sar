@@ -65,7 +65,6 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - **Offline sweep (12 runs):** 2 % → 3/3 home (0.8–1.8 m off); 5 % → 2/3 trapped inside; 10 % → 0/3 within 2 m; 20 % → lost. **0 collisions at every drift level.** Drift breaks getting home, not avoidance.
 - **Bugs:** float param type (sim_vio crash); stale Gazebo blocking restart (force-kill + verify); time-sync v1 used poses up to 15 s old → fake walls in doorway → drone flew around the building outside (aborted). v2: least-squares RTF + 1 s plausibility gate; only ~10 % frames matched, rest fallback.
 - **Real run 1012_1449 (2 %, seed 0):** completed, 0 impacts, min clearance 0.80 m, VIO drift 1.57 m, estimate error 1.48 m, **true landing 1.52 m from home** while the drone believed it was home. Matches offline.
-- WSL sometimes serves a stale copy of a just-edited script → use fresh file names for launchers.
 - **Real run 1012_1455 (2 %, repeat):** completed, 0 impacts, true landing **1.37 m** from home (vs 1.52 m) → repeatable.
 - **Real run 1012_1503 (5 %, seed 0):** all 5 waypoints, then `no_path` on the way home: west wall doubled in the drifting map, doorway filled → **trapped**, hovered 15 min until the timeout, landed 20.8 m from home. Matches offline. New: estimate error 2.7 m meant the drone really hovered **0.39 m** from a pillar while believing it had ≥ 1.2 m → drift shrinks real safety margin silently.
 - **Stage 3 closed (first pass).** Next: Stage 4 return decision (trust in own position + doorway still in map → turn back early).
@@ -77,5 +76,19 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - **Monte Carlo (240 runs, 10 seeds):** safe return within 2 m — Stage 3: 40/0/0/0 % at 2/5/10/20 % drift; Stage 4: 100/100/100/40 %. Map + relocalisation without the decision: 100/100/100/10 % with full coverage → the decision only pays off at 20 % and costs ~0.4–1 waypoint below that. Optimistic 2 % prior → door-frame collisions at ≥10 %.
 - **Real flights:** Stage 4 at 5 % (2 seeds) and 10 % landed 0.35 / 0.52 / 0.89 m from home, 0 collisions, while PX4's estimate was 2.9 / 2.9 / 6.0 m off. Link-loss rule: 2/5 waypoints, 0.74 m. All Stage 4 real flights turned back after waypoint 3.
 - **Limitation found:** drift-rate estimate biased low with frequent small corrections (real 10 % run learned 5–6 %). Next: long-baseline estimator, deeper building.
-- Tooling: device file sync sometimes served a stale copy → commit under fresh file names; container restart lost a partial sweep → sweep resumes from runs.jsonl.
+- The Monte Carlo sweep is resumable: finished runs are read back from `runs.jsonl` and skipped.
+
+### 2026-10-13: Stage 5 — random deep buildings
+
+- **Generator:** `make_building.py` (seed → corridor + 8–12 rooms, doors, debris, survivor, room-search mission; same building for bench, Gazebo, QGC and radio model).
+- **Algorithm changes:** long-baseline drift-rate estimator (reads ~10.5 % at 10 %, ~2.5 % at 2 %); recognition alarm (5 bad matches with the anchor in view → assume 15 %; ambiguous corridor fits don't count); skip stuck waypoints after 15 s; adaptive look-ahead near walls (fixed door-frame scrapes, which had been 40 % of runs at 5 % in an early version).
+- **Real simulator problems:** waypoint-skip timer started at node launch (fixed); corridor walls mapped up to 0.8 m too far in (timing smear while turning) → no way in → planner routed outside and **clipped an unseen corner, drone flipped** (run discarded). Fixes: motion-gated mapping (skip frames while yaw rate > 0.25 rad/s), corridors 4.0 m / doors 3.0 m. PX4 land detector hung on the ground with baro height → forced disarm after 60 s (sim only).
+- **Bench speed-up:** skip out-of-range obstacles in ray casting + SciPy distance transform (verified identical) → 5.5× faster.
+- **Monte Carlo (400 runs):** deep buildings, safe return at 2/5/10/20 % — Stage 5: 100/100/50/40 % (0 collisions); without the decision: 100/30/0/0 % (up to 40 % collisions); Stage 3: 0 %; link-loss rule: 100/90/0/0 % but ~0.5 rooms searched. Stage 1 building with final code: 100/100/100/20 %, more waypoints than Stage 4 v1.
+- **Real flights (building 0):**
+  - Stage 5 at 5 %: 1 room, landed 0.64 m from home, 0 collisions.
+  - No return decision at 5 %: 7 rooms, 276 m without GPS, 13 m drift, 1 collision, landed 25 m from home (timeout).
+  - Stage 5 (final code) at 10 %: alarm → turned back after 2 rooms; scraped a wall at the start of the return (5 m error); relocalised 4.9 m (error < 0.5 m); then went into a room and hovered 26 min at a dead end next to its west wall (path ended short of a breadcrumb inside the wall margin, no re-plan, no no-progress rule in the return). Landed 26.6 m from home, own estimate only 1.6 m off.
+  - Lesson: the 10 % failure is a planning dead end, not lost localisation.
+- **Remaining failures (10–20 %):** trapped deep inside where nothing can be recognised and the drift rate cannot be learned; or turned back in time but landed ~9–10 m off. Next: no-progress watchdog in the return + clearing the old map when stuck.
 

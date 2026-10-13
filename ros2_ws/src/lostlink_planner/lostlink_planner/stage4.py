@@ -78,6 +78,9 @@ class DriftAwareMap(OccupancyMap2D):
         if self.anchor_open:
             self.anchor_open = False
             self.anchor_dist = distance_field(self.anchor_hits >= self.min_hits, self.res, max_dist=1.0)
+            # how far every cell is from anything in the anchor map (up to 5 m): used to tell whether
+            # what the camera sees now is a part of the building that the anchor map covers at all
+            self.anchor_reach = distance_field(self.anchor_hits >= self.min_hits, self.res, max_dist=5.0)
 
     def shift(self, dn, de):
         """Move the (non-anchor) map by (dn, de) metres - after a relocalisation."""
@@ -245,19 +248,41 @@ class ReturnDecision:
         self.endurance, self.reserve, self.v_nom = endurance_s, reserve_s, v_nom
         self.sigma_fix, self.s_fix = sigma_fix, 0.0
         self.r_prior, self._num, self._den = r_hat, 0.0, 0.0
+        self.estimator, self.r_floor, self.base_min, self._hist = "increments", 0.02, 15.0, []
+        self.lookback_leg = None
 
-    def fixed(self, s, sigma, shift_m=None):
-        """A relocalisation at odometer s measured the accumulated drift `shift_m` since the last fix.
-        Learn the drift rate online (one-sided: it can only make the drone MORE careful).
-        0.25 m (one map cell) is subtracted as quantisation noise."""
-        if shift_m is not None and s - self.s_fix > 0.5:
+    def fixed(self, s, sigma, shift_m=None, corr=None):
+        """A relocalisation at odometer s. Learn the drift rate online.
+
+        estimator "increments" (Stage 4 v1): sum of each shift / distance since the previous fix,
+            minus 0.25 m quantisation per fix; never below the prior. Biased LOW when the drone
+            relocalises often (every small correction is rounded away).
+        estimator "baseline" (Stage 5): compare the total correction now with the total correction
+            at an earlier fix at least `base_min` metres back (longest such baseline, up to 60 m):
+                r = (|corr_now - corr_then| + 0.25) / distance flown in between
+            The +0.25 m (one map cell) makes it a conservative (upper) estimate. It can go down as
+            well as up, but never below r_floor."""
+        if self.estimator == "baseline" and corr is not None:
+            c = np.asarray(corr, float)
+            best = None
+            for s_i, c_i in self._hist:
+                ds = s - s_i
+                if self.base_min <= ds <= 60.0 and (best is None or ds > best[0]):
+                    best = (ds, c_i)
+            if best is not None:
+                self.r_hat = max(self.r_floor, (float(np.linalg.norm(c - best[1])) + 0.25) / best[0])
+            self._hist.append((s, c.copy()))
+        elif shift_m is not None and s - self.s_fix > 0.5:
             self._num += max(0.0, shift_m - 0.25); self._den += s - self.s_fix
             if self._den >= 5.0:
                 self.r_hat = max(self.r_prior, self._num / self._den)
         self.sigma_fix, self.s_fix = sigma, s
 
     def landing_sigma(self, L_exit_home, sigma_at_exit=0.3):
-        return sigma_at_exit + self.r_hat * L_exit_home
+        # Stage 5: with the look-back final leg the drone keeps relocalising against the facade,
+        # so only the distance between two fixes (~4 m) counts, not the whole way home
+        L = min(L_exit_home, self.lookback_leg) if self.lookback_leg else L_exit_home
+        return sigma_at_exit + self.r_hat * L
 
     def sigma(self, s):
         return self.sigma_fix + self.r_hat * max(0.0, s - self.s_fix)
@@ -293,7 +318,7 @@ class LostLinkMission:
 
     def __init__(self, waypoints_ne, policy="stage4", r_hat=0.05, e_tol=0.4, capture_m=3.0,
                  budget_m=2.0, sigma_anchor=0.4, endurance_s=1200.0, dll_s=10.0, reach_r=0.6,
-                 lookahead=1.5, yaw_first_deg=40.0, look_back=True, map_kwargs=None):
+                 lookahead=1.5, yaw_first_deg=40.0, look_back=True, map_kwargs=None, rate_estimator="baseline"):
         assert policy in self.POLICIES, policy
         self.look_back = look_back
         self.policy = policy
@@ -305,6 +330,20 @@ class LostLinkMission:
         self.planner = EgoStylePlanner(self.grid)
         self.crumbs = Breadcrumbs()
         self.dec = ReturnDecision(r_hat=r_hat, capture_m=capture_m, budget_m=budget_m, endurance_s=endurance_s)
+        self.dec.estimator = rate_estimator
+        self.dec.lookback_leg = 4.0 if (look_back and self.reloc and rate_estimator == "baseline") else None
+        self.r_alarm, self.alarm_after = 3 * r_hat, 5           # Stage 5: recognition alarm (None/0 to disable)
+        self.skipped = []
+        self.adaptive_lookahead = True                         # Stage 5
+        # Stage 5b: recovery when stuck on the way home (map policies only). If the drone has moved
+        # less than stuck_move_m in stuck_s seconds: first re-plan (drop the path, switch between
+        # direct planning and breadcrumbs, aim further along the route); if still stuck, clear the
+        # drifted map and rebuild it from what the camera sees now (four headings, 90 deg apart).
+        self.recover = self.forget
+        self.stuck_s, self.stuck_move_m, self.rescan_dwell_s = 12.0, 1.0, 2.5
+        self._mv_p, self._mv_t, self._stuck_n, self._rescan_t0, self._rescan_yaw0, self._push_far = None, 0.0, 0, None, 0.0, False
+        self.n_map_clears, self.n_stuck = 0, 0
+        self.reloc_gate, self.n_gated = 2.5, 0                 # Stage 5b: innovation gate (x sigma)
         self.r_hat, self.sigma_anchor, self.e_tol = r_hat, sigma_anchor, e_tol
         self.wps = [np.asarray(w, float) for w in waypoints_ne]
         self.k = 0
@@ -348,6 +387,20 @@ class LostLinkMission:
         self.grid.insert(pts)
 
     # ---- relocalisation -------------------------------------------------------
+    def _anchor_in_view(self, rng_m=10.0, half_fov=0.55, min_cells=60):
+        """Are there enough anchor-map walls inside the camera's field of view (within 10 m)?
+        Insensitive to a few metres of drift, unlike comparing cell positions directly."""
+        if self._anchor_ne is None:
+            ai, aj = np.nonzero(self.grid.anchor_hits >= self.grid.min_hits)
+            self._anchor_ne = np.stack([self.grid.n0 + (ai + .5) * self.grid.res, self.grid.e0 + (aj + .5) * self.grid.res], 1)
+        rel = self._anchor_ne - self.p
+        d = np.hypot(rel[:, 0], rel[:, 1])
+        b = np.arctan2(rel[:, 1], rel[:, 0])
+        vis = (d < rng_m) & (np.abs((b - self._yaw + np.pi) % (2 * np.pi) - np.pi) < half_fov)
+        return int(vis.sum()) >= min_cells
+
+    _anchor_ne = None
+
     def _try_reloc(self, t):
         if not (self.reloc and self.denied and not self.grid.anchor_open) or t - self._match_t < 1.0:
             return False
@@ -359,21 +412,44 @@ class LostLinkMission:
         pi, pj = self.grid.to_cell(*self.p)
         if np.sum(np.hypot(ai - pi, aj - pj) * self.grid.res < 12.0) < 40:
             return False
-        r = match_to_anchor(self.grid.anchor_dist, ci, cj, radius_m=min(3 * sig + 0.5, 5.0), res=self.grid.res)
+        # search radius from the expected error; after 3 failed matches in a row (in view of the anchor)
+        # the error is probably bigger than assumed -> search the full 5 m (Stage 5)
+        radius = 5.0 if self._fails >= 3 else min(3 * sig + 0.5, 5.0)
+        r = match_to_anchor(self.grid.anchor_dist, ci, cj, radius_m=radius, res=self.grid.res)
         if r is None:
             return False
         dn, de, sc, s0, unique = r
         good = unique and sc >= 0.55 and (sc - s0 >= 0.08 or math.hypot(dn, de) < 0.3)
+        # Stage 5b: innovation gate. A correction much larger than the error we expect is more likely
+        # a look-alike (a corridor wall matched onto the opposite wall, a mirror-image room) than drift.
+        # The recognition alarm raises the expected error, which then lets large corrections through.
+        gated = bool(good and self.reloc_gate and math.hypot(dn, de) > self.reloc_gate * sig + 0.5)
+        if gated:                                        # a gated match also counts towards the alarm
+            good = False
+            self.n_gated += 1
         self.reloc_log.append((round(t, 1), round(dn, 2), round(de, 2), round(sc, 3), round(s0, 3), bool(unique), bool(good)))
         if not good:
+            # count it as a failure only if most of what we see now lies within the search radius
+            # of anchor-map walls (i.e. the anchor really covers this view)
+            # a corridor gives a good but ambiguous fit (not unique) - that is geometry, not drift.
+            # Only a poor fit everywhere in the search area counts as evidence of large drift.
+            if (sc < 0.35 or gated) and self._anchor_in_view():
+                self._fails += 1
+            # Stage 5 "recognition alarm": the anchor map is in view but repeated matches fail ->
+            # the drift is probably much larger than assumed. Be pessimistic from now on.
+            if self._fails == self.alarm_after and self.dec.r_hat < self.r_alarm:
+                self.dec.r_hat = self.r_alarm
+                self.grid.window = max(3.0, self.e_tol / self.dec.r_hat)
+                self.events.append((round(t, 1), f"recognition alarm: {self._fails} failed matches -> assume {100 * self.r_alarm:.0f} % drift"))
             return False
+        self._fails = 0
         if math.hypot(dn, de) >= 0.25:
             self.corr += np.array([dn, de]); self.p = self.p + np.array([dn, de])
             self.grid.shift(dn, de); self.crumbs.shift_unanchored(dn, de)
             self.path, self._goal_used, self._route_t = None, None, -1e9
         r_before = self.dec.r_hat
-        self.dec.fixed(self.s, 0.3, shift_m=math.hypot(dn, de))
-        if self.dec.r_hat > r_before + 1e-6:
+        self.dec.fixed(self.s, 0.3, shift_m=math.hypot(dn, de), corr=self.corr)
+        if abs(self.dec.r_hat - r_before) > 0.002:
             self.grid.window = max(3.0, self.e_tol / self.dec.r_hat)
             self.events.append((round(t, 1), f"drift rate re-estimated: {100 * self.dec.r_hat:.1f} %"))
         self.n_reloc += 1
@@ -390,6 +466,8 @@ class LostLinkMission:
                     need = True; break
         if not need and np.linalg.norm(self.path[0] - p) > 2.0:
             need = True
+        if not need and np.linalg.norm(self.path[-1] - p) < 0.3 and np.linalg.norm(goal - p) > 0.75:
+            need = True                                  # Stage 5b: path ends here, goal is elsewhere
         if need:
             if self._t < self._nopath_until:                 # no path a moment ago: keep looking around
                 return p[0], p[1], wrap(yaw + 0.5), "no_path"
@@ -399,7 +477,12 @@ class LostLinkMission:
                 self.path, self._goal_used, self._nopath_until = None, None, self._t + 1.0
                 return p[0], p[1], wrap(yaw + 0.5), "no_path"
             self.path, self.mode, self._goal_used = path, mode, goal
-        c = carrot(self.path, p, self.lookahead)
+        # Stage 5: adaptive look-ahead - close to walls (door frames) chase a nearer point on the path,
+        # otherwise the drone cuts the inside of tight corners
+        la = self.lookahead
+        if self.adaptive_lookahead:
+            la = float(np.clip(self.grid.dist_at(*p) - 0.3, 0.5, self.lookahead))
+        c = carrot(self.path, p, la)
         d = c - p
         if np.linalg.norm(d) < 0.2:
             return c[0], c[1], yaw, self.mode
@@ -418,10 +501,13 @@ class LostLinkMission:
             self._best_d, self._best_t, self._route_t = 1e9, t, -1e9
             self.events.append((round(t, 1), f"return: {reason} (after wp {self.k}/{len(self.wps)})"))
 
-    _t, _nopath_until = 0.0, -1.0
+    _t, _nopath_until, _fails, _yaw = 0.0, -1.0, 0, 0.0
+    wp_best, wp_best_t, skip_after = 1e9, None, 15.0
 
     def step(self, t, yaw, t_flight):
-        self._t = t
+        self._t, self._yaw = t, yaw
+        if self.wp_best_t is None:          # waypoint-progress timer starts with the mission, not the node
+            self.wp_best_t = t
         p = self.p
         info = {"state": self.state, "s": round(self.s, 2), "sigma": round(self.dec.sigma(self.s), 2), "corr": self.corr.round(2).tolist()}
         if self.done:
@@ -439,9 +525,19 @@ class LostLinkMission:
             self._route_t = t
 
         if self.state == "mission":
-            if self.k < len(self.wps) and np.linalg.norm(p - self.wps[self.k]) < self.reach_r:
-                self.events.append((round(t, 1), f"reached wp {self.k + 1}"))
-                self.k += 1; self.path = None
+            if self.k < len(self.wps):
+                d = float(np.linalg.norm(p - self.wps[self.k]))
+                if d < self.wp_best - 0.5:
+                    self.wp_best, self.wp_best_t = d, t
+                if d < self.reach_r:
+                    self.events.append((round(t, 1), f"reached wp {self.k + 1}"))
+                    self.k += 1; self.path = None; self.wp_best, self.wp_best_t = 1e9, t
+                elif self.skip_after and t - self.wp_best_t > self.skip_after:
+                    # Stage 5: no progress towards this waypoint (e.g. it sits inside an obstacle in
+                    # the drone's own map) -> give it up and continue the search
+                    self.events.append((round(t, 1), f"skipped wp {self.k + 1} (no progress for {self.skip_after:.0f} s)"))
+                    self.skipped.append(self.k)
+                    self.k += 1; self.path = None; self.wp_best, self.wp_best_t = 1e9, t
             if self.k >= len(self.wps):
                 self._start_return(t, "mission complete")
             elif self.policy == "rtl_link" and self.link_lost_t > self.dll_s:
@@ -461,6 +557,10 @@ class LostLinkMission:
             self.done, self.state = True, "done"
             self.events.append((round(t, 1), "home (own estimate)"))
             return self._out(p[0], p[1], yaw, dict(info, mode="done"))
+        if self.recover:
+            out = self._recover(t, p, yaw, info)
+            if out is not None:
+                return out
         if not self.forget:
             n, e, ys, mode = self._drive(p, yaw, np.zeros(2))
             return self._out(n, e, ys, dict(info, mode=mode, goal=len(self.wps)))
@@ -501,6 +601,44 @@ class LostLinkMission:
         n, e, ys, mode = self._drive(p, yaw, goal)
         return self._out(n, e, ys, dict(info, mode=mode, goal=len(self.wps)))
 
+    def _recover(self, t, p, yaw, info):
+        """Stage 5b stuck watchdog for the return. Returns a setpoint while re-mapping, else None."""
+        if self._rescan_t0 is not None:                       # re-mapping: hold, look in four directions
+            k = int((t - self._rescan_t0) / self.rescan_dwell_s)
+            if k < 4:
+                return self._out(p[0], p[1], wrap(self._rescan_yaw0 + k * math.pi / 2),
+                                 dict(info, mode="rescan", goal=len(self.wps)))
+            self._rescan_t0, self._mv_p, self._mv_t = None, p.copy(), t
+            self.path, self._route_t = None, -1e9
+            return None
+        if self._scan_t0 is not None and self._scan_t0 > 0:  # the planned scan near the exit is not "stuck"
+            self._mv_p, self._mv_t = p.copy(), t
+            return None
+        if self._mv_p is None or np.linalg.norm(p - self._mv_p) > self.stuck_move_m:
+            if self._mv_p is not None and np.linalg.norm(p - self._mv_p) > 2 * self.stuck_move_m:
+                self._stuck_n, self._push_far = 0, False         # really moving again
+            self._mv_p, self._mv_t = p.copy(), t
+            return None
+        if t - self._mv_t < self.stuck_s:
+            return None
+        self._stuck_n += 1; self.n_stuck += 1
+        self._mv_p, self._mv_t = p.copy(), t
+        if self._stuck_n % 2 == 1:                            # level 1: re-plan differently
+            self.use_crumbs = not self.use_crumbs
+            self._push_far = True
+            self.path, self._goal_used, self._nopath_until, self._route_t = None, None, -1.0, -1e9
+            self._best_d, self._best_t = 1e9, t
+            self.events.append((round(t, 1), f"stuck {self.stuck_s:.0f} s: re-plan ({'breadcrumbs' if self.use_crumbs else 'direct'})"))
+            return None
+        # level 2: the map itself is the problem -> clear it and rebuild from what is visible now
+        if hasattr(self.grid, "hits"):
+            self.grid.hits[:] = 0; self.grid._dirty = True
+        self.n_map_clears += 1
+        self.path, self._goal_used, self._nopath_until = None, None, -1.0
+        self._rescan_t0, self._rescan_yaw0 = t, yaw
+        self.events.append((round(t, 1), "stuck again: map cleared, re-mapping"))
+        return self._out(p[0], p[1], yaw, dict(info, mode="rescan", goal=len(self.wps)))
+
     def _known_free(self, p, target):
         """Straight line p->target runs along anchored crumbs (flown while the position was trusted)."""
         A = np.array([c for c, a in zip(self.crumbs.pts, self.crumbs.anchored) if a])
@@ -514,6 +652,8 @@ class LostLinkMission:
     def _subgoal(self, p, ahead=4.0):
         """Farthest point along the breadcrumb route, within `ahead` m, that is in plain view."""
         R = np.asarray(self._route, float)
+        if self._push_far:
+            return point_along(R, ahead)
         best = R[min(1, len(R) - 1)]
         for s in np.arange(0.5, ahead + 0.01, 0.5):
             q = point_along(R, s)

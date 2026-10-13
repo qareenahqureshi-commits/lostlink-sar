@@ -39,7 +39,7 @@ The `.ulg` logs are too big for the repo (27 MB and 65 MB), so they go in a Rele
 
 - **Changed or new files:** **Add file → Upload files**, drag them in (same name = replaced), and commit.
 - **Small text fixes:** open the file on GitHub → pencil icon → edit → **Commit changes**.
-- Claude tells you which files changed after each session.
+- Keep a short list of the files you changed in each session (the lab notebook helps), so nothing is missed.
 
 ### The trade-off
 

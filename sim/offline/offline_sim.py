@@ -51,17 +51,23 @@ class World:
             tg = np.where(dz > 1e-6, -oz / dz, np.inf)
         best = np.minimum(best, np.where(tg > 0, tg, np.inf))
         for c, ax1, ax2, h1, h2, H, _ in self.boxes:
+            if np.linalg.norm(o2 - c) - math.hypot(h1, h2) > far:      # out of camera range: skip
+                continue
             lo = np.array([-h1, -h2, -H]); hi = np.array([h1, h2, 0.0])   # local (x, y, z_ned)
             rel = o2 - c
             O = np.array([rel @ ax1, rel @ ax2, oz])
             D = np.stack([d2 @ ax1, d2 @ ax2, dz], axis=1)
             with np.errstate(divide="ignore", invalid="ignore"):
                 t1 = (lo - O) / D; t2 = (hi - O) / D
-            tmin = np.nanmax(np.minimum(t1, t2), axis=1); tmax = np.nanmin(np.maximum(t1, t2), axis=1)
+            a, b = np.minimum(t1, t2), np.maximum(t1, t2)
+            a = np.where(np.isnan(a), -np.inf, a); b = np.where(np.isnan(b), np.inf, b)
+            tmin = np.maximum(np.maximum(a[:, 0], a[:, 1]), a[:, 2]); tmax = np.minimum(np.minimum(b[:, 0], b[:, 1]), b[:, 2])
             hit = (tmax >= np.maximum(tmin, 0))
             t = np.where(tmin > 0, tmin, tmax)
             best = np.where(hit & (t > 0) & (t < best), t, best)
         for c, r, H, _ in self.cyls:
+            if np.linalg.norm(o2 - c) - r > far:
+                continue
             rel = o2 - c
             a = (d2 ** 2).sum(1); b = 2 * (d2 @ rel); cc = rel @ rel - r * r
             disc = b * b - 4 * a * cc
