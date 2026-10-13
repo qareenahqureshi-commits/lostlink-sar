@@ -1,0 +1,279 @@
+{
+  "policy": "map_reloc",
+  "outcome": "timeout_landed_away",
+  "waypoints_reached": 26,
+  "return_reason": "mission complete",
+  "relocalisations": 26,
+  "r_hat_prior": 0.05,
+  "r_hat_final": 0.15,
+  "vio_drift_final_m": 13.167,
+  "px4_estimate_error_final_m": 12.86,
+  "corrected_estimate_error_final_m": 12.13,
+  "true_landing_ne_m": [
+    6.65,
+    24.16
+  ],
+  "true_distance_from_home_m": 25.06,
+  "returned_within_budget": false,
+  "impacts": 1,
+  "min_clearance_m": 0.09,
+  "s_denied_m": 276.5,
+  "skipped_wps": [
+    16,
+    20,
+    21,
+    23,
+    24,
+    25
+  ],
+  "events": [
+    [
+      37.8,
+      "reached wp 1"
+    ],
+    [
+      53.4,
+      "GPS lost"
+    ],
+    [
+      63.0,
+      "anchor map closed after 4.0 m without GPS"
+    ],
+    [
+      63.0,
+      "relocalised: shift 0.00 m (score 1.00)"
+    ],
+    [
+      64.0,
+      "relocalised: shift 0.00 m (score 0.85)"
+    ],
+    [
+      64.4,
+      "reached wp 2"
+    ],
+    [
+      65.0,
+      "relocalised: shift 0.00 m (score 0.82)"
+    ],
+    [
+      66.2,
+      "relocalised: shift 0.00 m (score 0.81)"
+    ],
+    [
+      67.4,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      68.4,
+      "relocalised: shift 0.00 m (score 0.68)"
+    ],
+    [
+      69.6,
+      "relocalised: shift 0.00 m (score 0.65)"
+    ],
+    [
+      70.6,
+      "relocalised: shift 0.00 m (score 0.62)"
+    ],
+    [
+      70.6,
+      "reached wp 3"
+    ],
+    [
+      71.6,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      72.8,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      74.0,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      75.2,
+      "relocalised: shift 0.25 m (score 0.59)"
+    ],
+    [
+      76.2,
+      "relocalised: shift 0.00 m (score 0.57)"
+    ],
+    [
+      84.9,
+      "reached wp 4"
+    ],
+    [
+      101.2,
+      "reached wp 5"
+    ],
+    [
+      117.2,
+      "reached wp 6"
+    ],
+    [
+      124.6,
+      "recognition alarm: 5 failed matches -> assume 15 % drift"
+    ],
+    [
+      143.3,
+      "drift rate re-estimated: 5.2 %"
+    ],
+    [
+      143.3,
+      "relocalised: shift 1.25 m (score 0.72)"
+    ],
+    [
+      145.5,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      147.3,
+      "reached wp 7"
+    ],
+    [
+      158.7,
+      "reached wp 8"
+    ],
+    [
+      189.1,
+      "reached wp 9"
+    ],
+    [
+      203.9,
+      "reached wp 10"
+    ],
+    [
+      214.5,
+      "relocalised: shift 1.25 m (score 0.57)"
+    ],
+    [
+      215.5,
+      "relocalised: shift 0.00 m (score 0.57)"
+    ],
+    [
+      216.6,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      217.8,
+      "drift rate re-estimated: 4.6 %"
+    ],
+    [
+      217.8,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      219.0,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      230.5,
+      "reached wp 11"
+    ],
+    [
+      245.9,
+      "reached wp 12"
+    ],
+    [
+      261.0,
+      "drift rate re-estimated: 4.3 %"
+    ],
+    [
+      261.0,
+      "relocalised: shift 1.25 m (score 0.63)"
+    ],
+    [
+      262.0,
+      "relocalised: shift 0.00 m (score 0.63)"
+    ],
+    [
+      265.7,
+      "reached wp 13"
+    ],
+    [
+      279.4,
+      "reached wp 14"
+    ],
+    [
+      307.2,
+      "reached wp 15"
+    ],
+    [
+      331.1,
+      "reached wp 16"
+    ],
+    [
+      356.9,
+      "skipped wp 17 (no progress for 15 s)"
+    ],
+    [
+      371.0,
+      "reached wp 18"
+    ],
+    [
+      404.0,
+      "reached wp 19"
+    ],
+    [
+      425.1,
+      "reached wp 20"
+    ],
+    [
+      440.3,
+      "skipped wp 21 (no progress for 15 s)"
+    ],
+    [
+      472.2,
+      "skipped wp 22 (no progress for 15 s)"
+    ],
+    [
+      489.1,
+      "reached wp 23"
+    ],
+    [
+      518.6,
+      "skipped wp 24 (no progress for 15 s)"
+    ],
+    [
+      545.6,
+      "skipped wp 25 (no progress for 15 s)"
+    ],
+    [
+      561.0,
+      "skipped wp 26 (no progress for 15 s)"
+    ],
+    [
+      561.0,
+      "return: mission complete (after wp 26/26)"
+    ],
+    [
+      647.1,
+      "recognition alarm: 5 failed matches -> assume 15 % drift"
+    ],
+    [
+      657.2,
+      "relocalised: shift 4.42 m (score 0.68)"
+    ],
+    [
+      658.4,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      659.5,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      660.5,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      676.6,
+      "no progress: following breadcrumbs"
+    ]
+  ],
+  "rooms_searched": 7,
+  "rooms_total": 12,
+  "survivor_found": false,
+  "corrected_error_max_m": 12.14
+}
