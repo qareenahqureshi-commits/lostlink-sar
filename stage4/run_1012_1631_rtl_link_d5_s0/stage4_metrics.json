@@ -1,0 +1,44 @@
+{
+  "policy": "rtl_link",
+  "outcome": "completed",
+  "waypoints_reached": 2,
+  "return_reason": "link lost",
+  "relocalisations": 0,
+  "r_hat_prior": 0.05,
+  "r_hat_final": 0.05,
+  "vio_drift_final_m": 1.293,
+  "px4_estimate_error_final_m": 0.97,
+  "corrected_estimate_error_final_m": 0.99,
+  "true_landing_ne_m": [
+    0.68,
+    0.29
+  ],
+  "true_distance_from_home_m": 0.74,
+  "returned_within_budget": true,
+  "impacts": 0,
+  "min_clearance_m": 1.24,
+  "s_denied_m": 25.7,
+  "events": [
+    [
+      34.8,
+      "reached wp 1"
+    ],
+    [
+      49.4,
+      "GPS lost"
+    ],
+    [
+      60.6,
+      "reached wp 2"
+    ],
+    [
+      60.6,
+      "return: link lost (after wp 2/5)"
+    ],
+    [
+      99.8,
+      "home (own estimate)"
+    ]
+  ],
+  "corrected_error_max_m": 0.99
+}

@@ -1,0 +1,58 @@
+{
+  "n0": -15.0,
+  "e0": -10.0,
+  "res": 0.25,
+  "replans": 20,
+  "depth_frames": 894,
+  "avoid": true,
+  "outcome": "completed",
+  "waypoints_reached": 2,
+  "gps_deny_east": 14.0,
+  "final_vio_drift_m": 1.293,
+  "final_est_pos_ne": [
+    -0.04,
+    -0.4
+  ],
+  "frames_time_synced": 64,
+  "frames_fallback": 830,
+  "depth_sync_lag_s_median": 0.13,
+  "depth_sync_lag_s_p95": 0.158,
+  "policy": "rtl_link",
+  "return_reason": "link lost",
+  "events": [
+    [
+      34.8,
+      "reached wp 1"
+    ],
+    [
+      49.4,
+      "GPS lost"
+    ],
+    [
+      60.6,
+      "reached wp 2"
+    ],
+    [
+      60.6,
+      "return: link lost (after wp 2/5)"
+    ],
+    [
+      99.8,
+      "home (own estimate)"
+    ]
+  ],
+  "reloc_log": [],
+  "relocalisations": 0,
+  "corr_final": [
+    0.0,
+    0.0
+  ],
+  "r_hat_prior": 0.05,
+  "r_hat_final": 0.05,
+  "s_denied_m": 25.7,
+  "final_corrected_pos_ne": [
+    -0.04,
+    -0.4
+  ],
+  "crumbs": []
+}
