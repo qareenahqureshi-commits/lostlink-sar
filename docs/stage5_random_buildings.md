@@ -1,6 +1,6 @@
 # Stage 5: random deep buildings: does the return decision earn its place?
 
-**Date:** 13 Oct 2026  **Status:** ✅ Done: offline Monte Carlo (400 runs, final code) · real flights: 5 in generated building 0 (final code at 10 % drift: landed 0.78 m from home)
+**Date:** 13 Oct 2026  **Status:** ✅ Done: offline Monte Carlo (400 runs, final code) · real flights: 11 in 3 generated buildings (final code: 7 of 7 back within 2 m at 5–20 % drift, 0 collisions)
 
 ## Why this stage
 
@@ -159,13 +159,36 @@ Real-simulator only ([`avoid_mission_node.py`](../ros2_ws/src/lostlink_planner/l
 
 *Searched 2 rooms, turned back when the recognition alarm fired, and flew home along the corridor. On the way it learned a drift rate of 9.2–10 % (true: 10 %), and the correction check rejected one large look-alike match. The stuck recovery was not needed. PX4's own estimate was 5.5 m off at landing; the drone's corrected estimate was 0.92 m off. Min clearance 0.81 m, no collisions. (The "3 times in a row" rule of the correction check was added after this flight; it only changes anything after 3 rejected matches in a row, and this flight had 1.)*
 
+### Real flights with the final code: 3 buildings, 5–20 % drift
+
+To check that the final code works more than once, it was flown in two more generated buildings (seeds 1 and 2) at 5 %, 10 % and 20 % drift, in addition to the building 0 flight above.
+
+| Run | Building | VIO drift | Rooms really searched | Turned back because | Truly landed from home | Collisions | Min clearance | Drift rate learned | PX4 estimate error → drone's corrected error |
+|---|---|---|---|---|---|---|---|---|---|
+| `run_1013_2153_b1_stage4_d5` | 1 | 5 % | 2 | drift | ✅ 0.35 m | 0 | 1.21 m | 5.2 % | 2.18 → 0.38 m |
+| `run_1013_2158_b1_stage4_d10` | 1 | 10 % | 1 | drift | ✅ 0.92 m | 0 | 0.95 m | 9.4 % | 4.39 → 0.96 m |
+| `run_1014_1148_b1_stage4_d20` | 1 | 20 % | 1 | drift (recognition alarm) | ✅ 1.97 m | 0 | 0.71 m | 17.0 % | 6.68 → 2.14 m |
+| `run_1013_2202_b2_stage4_d5` | 2 | 5 % | 3 | drift | ✅ 0.25 m | 0 | 0.65 m | 5.2 % | 4.92 → 0.32 m |
+| `run_1013_2210_b2_stage4_d10` | 2 | 10 % | 1 | drift | ✅ 0.87 m | 0 | 0.70 m | 10.0 % | 3.28 → 0.81 m |
+| `run_1014_1023_b2_stage4_d20` | 2 | 20 % | 1 | drift (recognition alarm) | ✅ 2.00 m | 0 | 1.22 m | 18.9 % | 6.69 → 2.03 m |
+| `run_1013_1716_b0_stage4_d10` (above) | 0 | 10 % | 2 | drift (recognition alarm) | ✅ 0.78 m | 0 | 0.81 m | 9.2 % | 5.50 → 0.92 m |
+
+**All 7 real flights with the final code came back within 2 m of home, with no collisions**, in three different buildings.
+
+- At 5–10 % drift they landed 0.25–0.92 m from home.
+- At 20 % drift both flights landed right at the 2 m limit (1.97 m and 2.00 m). They count as successes, but only just. This matches the offline result (80 % safe returns at 20 %): it works, with almost no margin.
+- In every flight the drone learned its own drift rate in the air, close to the true value (5.2 % at 5 %, 9.2–10 % at 10 %, 17–19 % at 20 %).
+- The drone's corrected position was 3–15× more accurate than PX4's own estimate at landing.
+- The price is coverage, as offline: 1–3 rooms searched before turning back.
+- One more 20 % flight in building 1 was interrupted when the computer went to sleep mid-flight (the simulation clock jumped by hours). That run is invalid; it was discarded, kept in `_archive/stage5_failed_runs/`, and the flight was repeated.
+
 **What the real flights add to the offline numbers:**
 
 - Without the return decision, the drone gets lost deep inside, in the real simulator too.
 - With the decision, the first 10 % failure was not a localisation failure: the drone knew where it was but could not **move** out of a dead end. That led to the recovery fix.
 - The second 10 % failure came from **perceptual aliasing**: two walls that look the same from the doorway. The offline bench rarely produces it, because its depth is perfect. That led to the correction check.
-- With both fixes the real 10 % flight landed 0.78 m from home. That is one flight, so it shows that the fixes work in the full stack, not how often. The statistics are the offline numbers above.
-- Real flights collided in 3 of 5 runs (always with several metres of error); the offline bench at the same drift rarely does. The real depth map and flight dynamics are less forgiving.
+- With both fixes, 7 of 7 real flights (3 buildings, 5–20 % drift) landed within 2 m of home with no collisions. The statistics are still the offline numbers above; the real flights confirm them in the full PX4 + Gazebo stack.
+- Before the final code, real flights collided in 3 of 5 runs, always while several metres off. With the final code: 0 collisions in 7 flights.
 
 ## Development log
 
@@ -177,7 +200,8 @@ Real-simulator only ([`avoid_mission_node.py`](../ros2_ws/src/lostlink_planner/l
 6. **Slow Monte Carlo:** depth ray casting against ~60 boxes + distance maps took 53 ms per step. Out-of-range obstacles are now skipped, and the bench uses SciPy's exact distance transform (identical to the pure-NumPy version: max difference 0.0). That's 5.5× faster. A 10-minute compute cap per run was never needed in the final sweep.
 7. **Hovering at a dead end (real flight, 10 %):** the planned path ended short of a breadcrumb inside the wall's safety margin, and nothing triggered a re-plan; 26 min until the timeout. **Fix:** recovery when stuck (Stage 5b).
 8. **Wrong-wall match (real flight, 10 %):** in a doorway, the north corridor wall matched onto the south wall and the position was "corrected" 2.75 m the wrong way. **Fix:** correction check (Stage 5b). A first version rejected every large correction and lost the 20 % cases in the small building, where large corrections are real; accepting a shift that repeats 3 times restored them.
-9. **Monte Carlo restarts:** the sweep is resumable from `runs.jsonl`, so interrupted runs were simply continued. After the final change to the correction check, all runs of the two policies that use relocalisation were redone, so every number on this page comes from the final code.
+9. **Computer went to sleep during a real flight** (building 1, 20 %): the simulation clock jumped by hours and the run was invalid. Discarded, kept in `_archive/stage5_failed_runs/`, and repeated.
+10. **Monte Carlo restarts:** the sweep is resumable from `runs.jsonl`, so interrupted runs were simply continued. After the final change to the correction check, all runs of the two policies that use relocalisation were redone, so every number on this page comes from the final code.
 
 ## How to run
 
@@ -204,12 +228,12 @@ python3 sim/offline/stage5_report.py --dir results/stage5/offline_v2
 3. **Planning through unknown space** treats it as free. That caused one real crash around an unseen outside corner.
 4. **One building family** (corridor + rooms). No stairs, no multi-floor, no moving obstacles.
 5. **Simulated VIO** (drift model, no yaw drift) and a simple radio model, as in Stages 3–4.
-6. **Real flights:** few (5 in generated buildings; with the final code one at 10 % drift, which landed 0.78 m from home). The statistics come from the offline bench.
+6. **Real flights:** 7 with the final code (3 buildings, one flight per building and drift level). Enough to confirm the offline results, not to give real-simulator percentages. At 20 % drift both real flights landed right at the 2 m limit.
 7. **Look-alike places.** The correction check catches large wrong corrections, but a wrong match that is smaller than the expected error, or one that repeats 3 times, still gets through. Symmetric buildings are the hard case.
-8. **Collisions with large error.** Real flights collided in 3 of 5 runs, always while the position was several metres off; the offline bench underestimates this.
+8. **Collisions with large error.** Before the final code, real flights collided in 3 of 5 runs, always while the position was several metres off; the offline bench underestimates this risk.
 
 ## Next
 
-1. More real flights with the final code (several drift seeds at 5 %, 10 %, 20 %) to put error bars on the real-simulator results.
+1. Paper: method, Stage 4–5 results (offline + 7 real flights with the final code), limitations.
 2. Rotation-aware matching and yaw drift in the VIO model.
-3. Paper: method, Stage 4–5 results, limitations.
+3. More drift seeds per building in the real simulator.

@@ -101,3 +101,11 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - **Monte Carlo, final code (400 runs, `results/stage5/offline_v2`):** deep buildings Stage 5 safe return 100/100/90/80 % (was 100/100/50/40 %); collisions 0/0/10/0 %. No-decision baseline (also with recovery): 100/20/30/30 %, collisions 20–70 %. Stage 1 building unchanged: 100/100/100/20 %.
 - **Remaining:** 3 of 40 Stage 5 deep-building runs at 10–20 % fail (1 trapped, 2 landed 9–13 m off). Next: more real flights with the final code for error bars; then the paper.
 
+### 2026-10-14: more real flights with the final code
+
+- Buildings 1 and 2 at 5 / 10 / 20 % drift (plus building 0 at 10 % from yesterday): **7 of 7 back within 2 m, 0 collisions**.
+- Landed 0.35 / 0.92 / 1.97 m (building 1) and 0.25 / 0.87 / 2.00 m (building 2); building 0 at 10 %: 0.78 m.
+- Drift rate learned in flight: 5.2 % (true 5), 9.2–10 % (true 10), 17–19 % (true 20).
+- 20 % flights land right at the 2 m limit: works, but no margin (matches offline 80 %).
+- One 20 % flight (building 1) invalid: the laptop slept mid-flight and the simulation clock jumped; discarded to `_archive/stage5_failed_runs/` and repeated.
+
