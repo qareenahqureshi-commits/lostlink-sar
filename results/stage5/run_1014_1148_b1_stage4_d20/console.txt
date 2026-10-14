@@ -1,0 +1,68 @@
+== clean start (building 1, policy stage4, drift 20% seed 1, GPS+link jammed at East > 14.0 m, r_hat 0.05) ==
+clean
+[ok] spec  -> /mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/sim/worlds/generated/building_1.json  (12 rooms, 53.0 m, 26 waypoints)
+[ok] world -> /home/kareena/PX4-Autopilot/Tools/simulation/gz/worlds/lostlink_b1.sdf
+[ok] plan  -> /mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/sim/missions/building_1.plan
+PX4 ready
+== Stage 3/4 parameters ==
+== simulated VIO + radio link ==
+    cs_gnss_pos: True
+    cs_ev_pos: True
+    cs_ev_vel: True
+== mission node (policy stage4) ==
+[INFO] [1791964164.970148050] [lostlink_avoid_mission]: 26 waypoints (N,E): [(-1.5, 8.0), (-1.5, 19.0), (-1.5, 17.8), (4.2, 19.2), (-1.5, 18.3), (-7.8, 19.4), (-1.5, 26.0), (4.2, 27.7), (-1.5, 31.0), (-7.8, 28.6), (-1.5, 40.4), (4.2, 37.4), (-1.5, 41.2), (-7.8, 39.1), (-1.5, 47.5), (-7.8, 49.1), (-1.5, 47.9), (4.2, 46.8), (-1.5, 54.2), (4.2, 55.3), (-1.5, 58.2), (-7.8, 56.9), (-1.5, 63.8), (4.2, 63.8), (-1.5, 63.9), (-7.8, 64.3)]
+[INFO] [1791964165.864296592] [lostlink_avoid_mission]: depth subscription /depth_camera: ok
+[INFO] [1791964165.951471475] [lostlink_avoid_mission]: avoidance=ON, logging to /mnt/c/Users/karee/Downloads/projects 2026/custom quadcopter hardware/px4 simulation/results/stage5/run_1014_1148_b1_stage4_d20
+[INFO] [1791964166.065263019] [lostlink_avoid_mission]: state WAIT_ODOM -> STREAM
+[INFO] [1791964167.672927933] [lostlink_avoid_mission]: state STREAM -> ARM
+[INFO] [1791964168.145665179] [lostlink_avoid_mission]: state ARM -> TAKEOFF
+[INFO] [1791964171.099539685] [lostlink_avoid_mission]: TAKEOFF pos=(0.0,0.0,0.0) goal#0 mode=- depth_frames=42 occ=59 gps=ok drift=0.00m sync=20/fb=22 gap=0.6211016178131104 lag=0.09s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[INFO] [1791964176.208935572] [lostlink_avoid_mission]: TAKEOFF pos=(-0.0,0.1,1.7) goal#0 mode=- depth_frames=87 occ=69 gps=ok drift=0.00m sync=20/fb=67 gap=2.8572378158569336 lag=0.09s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[INFO] [1791964181.650964598] [lostlink_avoid_mission]: state TAKEOFF -> MISSION
+[INFO] [1791964182.005176321] [lostlink_avoid_mission]: MISSION pos=(0.0,-0.0,2.7) goal#0 mode=direct depth_frames=130 occ=96 gps=ok drift=0.00m sync=20/fb=111 gap=5.739483594894409 lag=0.09s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[INFO] [1791964187.047744028] [lostlink_avoid_mission]: MISSION pos=(-0.4,2.6,2.9) goal#0 mode=direct depth_frames=167 occ=297 gps=ok drift=0.00m sync=20/fb=148 gap=8.284272909164429 lag=0.09s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[INFO] [1791964192.101981732] [lostlink_avoid_mission]: MISSION pos=(-1.0,5.7,3.0) goal#0 mode=direct depth_frames=203 occ=339 gps=ok drift=0.00m sync=28/fb=175 gap=10.307153224945068 lag=0.12s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[INFO] [1791964197.137420747] [lostlink_avoid_mission]: MISSION pos=(-1.5,8.5,3.0) goal#1 mode=astar depth_frames=234 occ=404 gps=ok drift=0.00m sync=37/fb=201 gap=2.3643555641174316 lag=0.12s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[INFO] [1791964202.212739634] [lostlink_avoid_mission]: MISSION pos=(-1.6,11.6,3.0) goal#1 mode=astar depth_frames=268 occ=450 gps=ok drift=0.00m sync=37/fb=236 gap=5.1512770652771 lag=0.12s err=None s4=['mission', 0.0, 0.0, 0.2, 0.05, 1]
+[WARN] [1791964206.540479039] [lostlink_avoid_mission]: GPS JAMMED at east=14.0 m (failure injection)
+[INFO] [1791964207.238579688] [lostlink_avoid_mission]: MISSION pos=(-1.9,14.4,3.0) goal#1 mode=astar depth_frames=300 occ=512 gps=DENIED drift=0.00m sync=37/fb=268 gap=8.069891452789307 lag=0.12s err=None s4=['mission', 0.0, 0.0, 0.22, 0.05, 1]
+[INFO] [1791964213.142181301] [lostlink_avoid_mission]: MISSION pos=(-1.9,15.9,3.0) goal#1 mode=astar depth_frames=329 occ=571 gps=DENIED drift=0.29m sync=37/fb=300 gap=11.800062417984009 lag=0.12s err=None s4=['mission', 0.0, 0.0, 0.3, 0.05, 0]
+[INFO] [1791964218.195835729] [lostlink_avoid_mission]: MISSION pos=(-1.9,17.2,3.0) goal#1 mode=astar depth_frames=361 occ=586 gps=DENIED drift=0.56m sync=37/fb=333 gap=14.783974170684814 lag=0.12s err=None s4=['mission', 0.0, 0.0, 0.36, 0.05, 0]
+[INFO] [1791964223.501610492] [lostlink_avoid_mission]: MISSION pos=(-1.9,18.8,2.9) goal#2 mode=direct+yaw depth_frames=389 occ=631 gps=DENIED drift=0.87m sync=56/fb=352 gap=1.0109620094299316 lag=0.11s err=None s4=['mission', 0.0, 0.0, 0.3, 0.05, 0]
+[INFO] [1791964228.494343796] [lostlink_avoid_mission]: MISSION pos=(-1.4,17.8,3.1) goal#3 mode=astar depth_frames=391 occ=637 gps=DENIED drift=1.11m sync=56/fb=392 gap=3.4061906337738037 lag=0.11s err=None s4=['mission', 0.0, 0.0, 0.3, 0.05, 0]
+[INFO] [1791964233.552166722] [lostlink_avoid_mission]: MISSION pos=(0.4,18.3,3.0) goal#3 mode=astar depth_frames=394 occ=723 gps=DENIED drift=1.55m sync=56/fb=424 gap=6.3548924922943115 lag=0.11s err=None s4=['mission', 0.25, 0.0, 0.3, 0.05, 0]
+[INFO] [1791964238.598223863] [lostlink_avoid_mission]: MISSION pos=(1.7,18.4,3.0) goal#3 mode=astar depth_frames=411 occ=423 gps=DENIED drift=1.87m sync=56/fb=455 gap=9.217074871063232 lag=0.11s err=None s4=['mission', 0.25, 0.0, 0.34, 0.05, 0]
+[INFO] [1791964244.440628901] [lostlink_avoid_mission]: MISSION pos=(3.2,19.0,3.0) goal#3 mode=direct depth_frames=443 occ=377 gps=DENIED drift=2.26m sync=56/fb=487 gap=13.038432359695435 lag=0.11s err=None s4=['mission', 0.25, 0.0, 0.43, 0.05, 0]
+[INFO] [1791964249.495885259] [lostlink_avoid_mission]: MISSION pos=(3.5,19.2,3.0) goal#4 mode=astar depth_frames=449 occ=403 gps=DENIED drift=2.47m sync=72/fb=502 gap=0.6057517528533936 lag=0.14s err=None s4=['mission', 0.25, 0.0, 0.48, 0.05, 0]
+[INFO] [1791964254.492358333] [lostlink_avoid_mission]: MISSION pos=(0.4,18.3,3.0) goal#4 mode=direct depth_frames=456 occ=91 gps=DENIED drift=3.06m sync=72/fb=533 gap=3.519021511077881 lag=0.14s err=None s4=['mission', 0.25, 0.0, 1.33, 0.15, 0]
+[INFO] [1791964259.512806974] [lostlink_avoid_mission]: MISSION pos=(-2.0,18.4,3.0) goal#5 mode=scan depth_frames=469 occ=134 gps=DENIED drift=3.42m sync=72/fb=565 gap=6.560670375823975 lag=0.14s err=None s4=['return', 0.25, 0.0, 1.68, 0.15, 0]
+[INFO] [1791964264.491833298] [lostlink_avoid_mission]: MISSION pos=(-2.0,18.4,3.0) goal#5 mode=scan depth_frames=469 occ=134 gps=DENIED drift=3.45m sync=72/fb=595 gap=9.471512794494629 lag=0.14s err=None s4=['return', 0.25, 0.0, 1.69, 0.15, 0]
+[INFO] [1791964269.499475454] [lostlink_avoid_mission]: MISSION pos=(-2.1,18.5,3.0) goal#5 mode=scan depth_frames=469 occ=134 gps=DENIED drift=3.45m sync=72/fb=625 gap=12.485090494155884 lag=0.14s err=None s4=['return', 0.25, 0.0, 1.7, 0.15, 0]
+[INFO] [1791964274.593063321] [lostlink_avoid_mission]: MISSION pos=(-2.1,17.8,3.0) goal#5 mode=astar+lookback depth_frames=472 occ=147 gps=DENIED drift=3.60m sync=74/fb=662 gap=15.023023128509521 lag=0.09s err=None s4=['return', 0.25, 0.0, 1.8, 0.15, 0]
+[INFO] [1791964280.349058327] [lostlink_avoid_mission]: MISSION pos=(-3.5,16.7,3.0) goal#5 mode=astar+lookback depth_frames=481 occ=107 gps=DENIED drift=3.97m sync=82/fb=695 gap=2.138939380645752 lag=0.09s err=None s4=['return', 0.25, 0.0, 2.1, 0.15, 0]
+[INFO] [1791964285.709756225] [lostlink_avoid_mission]: MISSION pos=(-3.8,15.0,3.0) goal#5 mode=direct+lookback depth_frames=509 occ=187 gps=DENIED drift=4.32m sync=82/fb=740 gap=4.5251171588897705 lag=0.09s err=None s4=['return', 0.25, 0.0, 2.36, 0.15, 0]
+[INFO] [1791964290.895469622] [lostlink_avoid_mission]: MISSION pos=(-3.5,13.1,3.0) goal#5 mode=direct+lookback depth_frames=540 occ=153 gps=DENIED drift=4.73m sync=82/fb=780 gap=6.974200487136841 lag=0.09s err=None s4=['return', 3.5, -0.5, 0.34, 0.1905, 0]
+[INFO] [1791964295.947531556] [lostlink_avoid_mission]: MISSION pos=(-3.9,9.4,3.0) goal#5 mode=direct+lookback depth_frames=570 occ=223 gps=DENIED drift=5.50m sync=82/fb=824 gap=9.240759134292603 lag=0.09s err=None s4=['return', 4.0, -0.75, 0.41, 0.1863, 0]
+[INFO] [1791964301.024700786] [lostlink_avoid_mission]: MISSION pos=(-4.3,5.8,3.0) goal#5 mode=direct+lookback depth_frames=614 occ=188 gps=DENIED drift=6.25m sync=102/fb=848 gap=1.1039857864379883 lag=0.09s err=None s4=['return', 4.25, -1.0, 0.35, 0.1703, 0]
+[INFO] [1791964306.106170582] [lostlink_avoid_mission]: MISSION pos=(-4.8,2.2,3.0) goal#5 mode=direct+lookback depth_frames=659 occ=159 gps=DENIED drift=7.02m sync=102/fb=892 gap=3.206428050994873 lag=0.09s err=None s4=['return', 4.5, -1.0, 0.71, 0.1699, 0]
+[INFO] [1791964307.150505648] [lostlink_avoid_mission]: state MISSION -> LAND
+[INFO] [1791964312.094639021] [lostlink_avoid_mission]: LAND pos=(-4.8,1.0,2.0) goal#5 mode=done depth_frames=704 occ=223 gps=DENIED drift=7.35m sync=102/fb=937 gap=6.2366955280303955 lag=0.09s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964317.138957063] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.2) goal#5 mode=done depth_frames=747 occ=242 gps=DENIED drift=7.42m sync=102/fb=980 gap=8.518627405166626 lag=0.09s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964322.210299515] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=791 occ=247 gps=DENIED drift=7.42m sync=120/fb=1006 gap=0.8363418579101562 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964327.252642065] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=836 occ=249 gps=DENIED drift=7.42m sync=120/fb=1051 gap=3.014254331588745 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964332.301219749] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=880 occ=249 gps=DENIED drift=7.42m sync=120/fb=1095 gap=5.0299553871154785 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964337.353135912] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=926 occ=250 gps=DENIED drift=7.42m sync=120/fb=1141 gap=7.177741050720215 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964343.159591460] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=971 occ=251 gps=DENIED drift=7.42m sync=142/fb=1164 gap=1.5104894638061523 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964348.205786900] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=1017 occ=252 gps=DENIED drift=7.42m sync=142/fb=1210 gap=3.5804080963134766 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964353.241269872] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.1) goal#5 mode=done depth_frames=1061 occ=253 gps=DENIED drift=7.42m sync=142/fb=1254 gap=5.654822587966919 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964358.302166971] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.2) goal#5 mode=done depth_frames=1107 occ=253 gps=DENIED drift=7.42m sync=142/fb=1300 gap=7.736025333404541 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[INFO] [1791964363.366551253] [lostlink_avoid_mission]: LAND pos=(-4.7,0.9,0.2) goal#5 mode=done depth_frames=1152 occ=253 gps=DENIED drift=7.42m sync=162/fb=1325 gap=0.8087961673736572 lag=0.08s err=None s4=['done', 4.5, -1.0, 0.83, 0.1699, 0]
+[WARN] [1791964367.344158927] [lostlink_avoid_mission]: landing not detected -> forced disarm (simulation only)
+[INFO] [1791964367.603676798] [lostlink_avoid_mission]: state LAND -> DONE
+[INFO] [1791964367.837675771] [lostlink_avoid_mission]: mission complete, logs saved
+== estimator after flight ==
+    cs_gnss_pos: False
+    cs_ev_pos: True
+    cs_inertial_dead_reckoning: False
+log: /home/kareena/PX4-Autopilot/build/px4_sitl_default/rootfs/log/2026-10-14/07_48_59.ulg
+RUN FINISHED: run_1014_1148_b1_stage4_d20

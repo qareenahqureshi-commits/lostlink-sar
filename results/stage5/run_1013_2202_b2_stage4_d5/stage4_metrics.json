@@ -1,0 +1,626 @@
+{
+  "policy": "stage4",
+  "outcome": "completed",
+  "waypoints_reached": 10,
+  "return_reason": "drift",
+  "relocalisations": 108,
+  "r_hat_prior": 0.05,
+  "r_hat_final": 0.0515,
+  "vio_drift_final_m": 5.04,
+  "px4_estimate_error_final_m": 4.92,
+  "corrected_estimate_error_final_m": 0.32,
+  "true_landing_ne_m": [
+    0.01,
+    -0.25
+  ],
+  "true_distance_from_home_m": 0.25,
+  "returned_within_budget": true,
+  "impacts": 0,
+  "min_clearance_m": 0.65,
+  "s_denied_m": 106.5,
+  "skipped_wps": [
+    6
+  ],
+  "events": [
+    [
+      31.8,
+      "reached wp 1"
+    ],
+    [
+      42.7,
+      "GPS lost"
+    ],
+    [
+      57.5,
+      "anchor map closed after 4.0 m without GPS"
+    ],
+    [
+      57.5,
+      "relocalised: shift 0.00 m (score 1.00)"
+    ],
+    [
+      58.5,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      59.8,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      59.8,
+      "reached wp 2"
+    ],
+    [
+      60.0,
+      "reached wp 3"
+    ],
+    [
+      60.9,
+      "relocalised: shift 0.00 m (score 0.88)"
+    ],
+    [
+      62.1,
+      "relocalised: shift 0.00 m (score 0.88)"
+    ],
+    [
+      63.3,
+      "relocalised: shift 0.00 m (score 0.88)"
+    ],
+    [
+      64.5,
+      "relocalised: shift 0.00 m (score 0.81)"
+    ],
+    [
+      65.6,
+      "relocalised: shift 0.00 m (score 0.80)"
+    ],
+    [
+      66.6,
+      "relocalised: shift 0.00 m (score 0.72)"
+    ],
+    [
+      67.8,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      68.8,
+      "relocalised: shift 0.00 m (score 0.64)"
+    ],
+    [
+      70.0,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      71.2,
+      "relocalised: shift 0.00 m (score 0.55)"
+    ],
+    [
+      75.6,
+      "reached wp 4"
+    ],
+    [
+      82.2,
+      "recognition alarm: 5 failed matches -> assume 15 % drift"
+    ],
+    [
+      88.2,
+      "relocalised: shift 0.56 m (score 0.68)"
+    ],
+    [
+      89.2,
+      "relocalised: shift 0.00 m (score 0.66)"
+    ],
+    [
+      90.4,
+      "relocalised: shift 0.25 m (score 0.66)"
+    ],
+    [
+      90.8,
+      "reached wp 5"
+    ],
+    [
+      91.6,
+      "relocalised: shift 0.00 m (score 0.66)"
+    ],
+    [
+      92.6,
+      "relocalised: shift 0.00 m (score 0.66)"
+    ],
+    [
+      93.8,
+      "relocalised: shift 0.00 m (score 0.62)"
+    ],
+    [
+      95.0,
+      "drift rate re-estimated: 6.7 %"
+    ],
+    [
+      95.0,
+      "relocalised: shift 0.00 m (score 0.67)"
+    ],
+    [
+      96.2,
+      "drift rate re-estimated: 6.1 %"
+    ],
+    [
+      96.2,
+      "relocalised: shift 0.25 m (score 0.66)"
+    ],
+    [
+      97.4,
+      "relocalised: shift 0.00 m (score 0.66)"
+    ],
+    [
+      98.4,
+      "relocalised: shift 0.00 m (score 0.68)"
+    ],
+    [
+      103.5,
+      "reached wp 6"
+    ],
+    [
+      110.2,
+      "drift rate re-estimated: 5.6 %"
+    ],
+    [
+      110.2,
+      "relocalised: shift 0.35 m (score 0.56)"
+    ],
+    [
+      114.4,
+      "drift rate re-estimated: 6.1 %"
+    ],
+    [
+      114.4,
+      "relocalised: shift 0.35 m (score 0.75)"
+    ],
+    [
+      115.6,
+      "relocalised: shift 0.00 m (score 0.75)"
+    ],
+    [
+      116.7,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      117.8,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      119.3,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      120.5,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      121.5,
+      "relocalised: shift 0.25 m (score 0.76)"
+    ],
+    [
+      122.5,
+      "relocalised: shift 0.00 m (score 0.76)"
+    ],
+    [
+      123.6,
+      "relocalised: shift 0.00 m (score 0.87)"
+    ],
+    [
+      124.8,
+      "relocalised: shift 0.00 m (score 0.87)"
+    ],
+    [
+      126.0,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      127.0,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      128.2,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      129.4,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      130.4,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      131.6,
+      "drift rate re-estimated: 5.9 %"
+    ],
+    [
+      131.6,
+      "relocalised: shift 0.25 m (score 0.92)"
+    ],
+    [
+      132.8,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      133.2,
+      "skipped wp 7 (no progress for 15 s)"
+    ],
+    [
+      134.0,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      142.7,
+      "drift rate re-estimated: 5.4 %"
+    ],
+    [
+      142.7,
+      "relocalised: shift 0.25 m (score 0.84)"
+    ],
+    [
+      143.8,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      144.8,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      145.8,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      146.8,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      148.0,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      149.2,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      151.4,
+      "relocalised: shift 0.00 m (score 0.60)"
+    ],
+    [
+      152.8,
+      "relocalised: shift 0.00 m (score 0.58)"
+    ],
+    [
+      153.8,
+      "relocalised: shift 0.00 m (score 0.58)"
+    ],
+    [
+      154.9,
+      "relocalised: shift 0.00 m (score 0.58)"
+    ],
+    [
+      176.3,
+      "reached wp 8"
+    ],
+    [
+      198.3,
+      "reached wp 9"
+    ],
+    [
+      217.1,
+      "reached wp 10"
+    ],
+    [
+      217.3,
+      "return: drift (after wp 10/26)"
+    ],
+    [
+      221.4,
+      "drift rate re-estimated: 5.9 %"
+    ],
+    [
+      221.4,
+      "relocalised: shift 1.95 m (score 0.59)"
+    ],
+    [
+      222.5,
+      "relocalised: shift 0.25 m (score 0.75)"
+    ],
+    [
+      223.6,
+      "relocalised: shift 0.00 m (score 0.75)"
+    ],
+    [
+      241.5,
+      "no progress: following breadcrumbs"
+    ],
+    [
+      243.1,
+      "drift rate re-estimated: 5.5 %"
+    ],
+    [
+      243.1,
+      "relocalised: shift 0.25 m (score 0.56)"
+    ],
+    [
+      246.5,
+      "relocalised: shift 0.00 m (score 0.66)"
+    ],
+    [
+      247.5,
+      "relocalised: shift 0.00 m (score 0.66)"
+    ],
+    [
+      248.6,
+      "drift rate re-estimated: 5.7 %"
+    ],
+    [
+      248.6,
+      "relocalised: shift 0.25 m (score 0.64)"
+    ],
+    [
+      249.8,
+      "relocalised: shift 0.00 m (score 0.70)"
+    ],
+    [
+      250.8,
+      "relocalised: shift 0.00 m (score 0.70)"
+    ],
+    [
+      252.8,
+      "drift rate re-estimated: 5.3 %"
+    ],
+    [
+      252.8,
+      "relocalised: shift 0.00 m (score 0.70)"
+    ],
+    [
+      254.0,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      255.0,
+      "relocalised: shift 0.00 m (score 0.59)"
+    ],
+    [
+      256.2,
+      "relocalised: shift 0.00 m (score 0.56)"
+    ],
+    [
+      270.8,
+      "stuck 12 s: re-plan (direct)"
+    ],
+    [
+      283.4,
+      "drift rate re-estimated: 4.8 %"
+    ],
+    [
+      283.4,
+      "relocalised: shift 0.35 m (score 0.58)"
+    ],
+    [
+      284.5,
+      "drift rate re-estimated: 5.2 %"
+    ],
+    [
+      284.5,
+      "relocalised: shift 0.25 m (score 0.59)"
+    ],
+    [
+      286.3,
+      "relocalised: shift 0.00 m (score 0.59)"
+    ],
+    [
+      287.5,
+      "relocalised: shift 0.00 m (score 0.62)"
+    ],
+    [
+      288.7,
+      "relocalised: shift 0.00 m (score 0.98)"
+    ],
+    [
+      289.7,
+      "relocalised: shift 0.00 m (score 0.97)"
+    ],
+    [
+      290.8,
+      "relocalised: shift 0.00 m (score 0.98)"
+    ],
+    [
+      292.0,
+      "relocalised: shift 0.00 m (score 0.98)"
+    ],
+    [
+      293.2,
+      "relocalised: shift 0.00 m (score 0.97)"
+    ],
+    [
+      294.4,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      295.6,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      296.8,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      300.2,
+      "drift rate re-estimated: 5.3 %"
+    ],
+    [
+      300.2,
+      "relocalised: shift 0.35 m (score 0.93)"
+    ],
+    [
+      301.3,
+      "relocalised: shift 0.00 m (score 0.93)"
+    ],
+    [
+      302.3,
+      "relocalised: shift 0.00 m (score 0.93)"
+    ],
+    [
+      303.3,
+      "relocalised: shift 0.00 m (score 0.93)"
+    ],
+    [
+      304.5,
+      "relocalised: shift 0.00 m (score 0.92)"
+    ],
+    [
+      305.5,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      306.0,
+      "at exit"
+    ],
+    [
+      306.6,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      307.6,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      308.8,
+      "drift rate re-estimated: 5.5 %"
+    ],
+    [
+      308.8,
+      "relocalised: shift 0.25 m (score 0.92)"
+    ],
+    [
+      312.4,
+      "drift rate re-estimated: 5.2 %"
+    ],
+    [
+      312.4,
+      "relocalised: shift 0.35 m (score 0.92)"
+    ],
+    [
+      313.4,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      314.4,
+      "drift rate re-estimated: 5.4 %"
+    ],
+    [
+      314.4,
+      "relocalised: shift 0.25 m (score 0.91)"
+    ],
+    [
+      315.6,
+      "relocalised: shift 0.00 m (score 0.93)"
+    ],
+    [
+      316.7,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      317.9,
+      "drift rate re-estimated: 5.2 %"
+    ],
+    [
+      317.9,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      319.7,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      320.9,
+      "drift rate re-estimated: 5.6 %"
+    ],
+    [
+      320.9,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      322.0,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      323.0,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      323.6,
+      "no progress: following breadcrumbs"
+    ],
+    [
+      324.2,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      325.2,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      326.2,
+      "drift rate re-estimated: 5.8 %"
+    ],
+    [
+      326.2,
+      "relocalised: shift 0.25 m (score 0.93)"
+    ],
+    [
+      327.3,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      328.3,
+      "drift rate re-estimated: 6.0 %"
+    ],
+    [
+      328.3,
+      "relocalised: shift 0.25 m (score 0.94)"
+    ],
+    [
+      329.3,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      330.5,
+      "drift rate re-estimated: 4.9 %"
+    ],
+    [
+      330.5,
+      "relocalised: shift 0.00 m (score 0.95)"
+    ],
+    [
+      331.7,
+      "relocalised: shift 0.00 m (score 0.96)"
+    ],
+    [
+      332.7,
+      "relocalised: shift 0.00 m (score 0.97)"
+    ],
+    [
+      333.9,
+      "drift rate re-estimated: 5.2 %"
+    ],
+    [
+      333.9,
+      "relocalised: shift 0.25 m (score 0.94)"
+    ],
+    [
+      334.9,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      340.2,
+      "home (own estimate)"
+    ]
+  ],
+  "rooms_searched": 3,
+  "rooms_total": 12,
+  "survivor_found": false,
+  "corrected_error_max_m": 1.61
+}

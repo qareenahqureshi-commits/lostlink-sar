@@ -1,0 +1,240 @@
+{
+  "policy": "stage4",
+  "outcome": "completed",
+  "waypoints_reached": 5,
+  "return_reason": "drift",
+  "relocalisations": 28,
+  "r_hat_prior": 0.05,
+  "r_hat_final": 0.1699,
+  "vio_drift_final_m": 7.422,
+  "px4_estimate_error_final_m": 6.68,
+  "corrected_estimate_error_final_m": 2.14,
+  "true_landing_ne_m": [
+    1.81,
+    -0.77
+  ],
+  "true_distance_from_home_m": 1.96,
+  "returned_within_budget": true,
+  "impacts": 0,
+  "min_clearance_m": 0.71,
+  "s_denied_m": 35.8,
+  "skipped_wps": [],
+  "events": [
+    [
+      29.0,
+      "reached wp 1"
+    ],
+    [
+      40.7,
+      "GPS lost"
+    ],
+    [
+      54.5,
+      "anchor map closed after 4.0 m without GPS"
+    ],
+    [
+      54.5,
+      "relocalised: shift 0.00 m (score 1.00)"
+    ],
+    [
+      55.6,
+      "relocalised: shift 0.00 m (score 0.94)"
+    ],
+    [
+      56.0,
+      "reached wp 2"
+    ],
+    [
+      56.8,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      57.8,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      58.8,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      60.0,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      60.0,
+      "reached wp 3"
+    ],
+    [
+      61.2,
+      "relocalised: shift 0.00 m (score 0.90)"
+    ],
+    [
+      62.2,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      63.2,
+      "relocalised: shift 0.00 m (score 0.76)"
+    ],
+    [
+      64.4,
+      "relocalised: shift 0.00 m (score 0.73)"
+    ],
+    [
+      65.4,
+      "relocalised: shift 0.25 m (score 0.69)"
+    ],
+    [
+      66.4,
+      "relocalised: shift 0.00 m (score 0.69)"
+    ],
+    [
+      67.6,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      68.6,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      69.6,
+      "relocalised: shift 0.00 m (score 0.61)"
+    ],
+    [
+      78.9,
+      "reached wp 4"
+    ],
+    [
+      85.6,
+      "recognition alarm: 5 failed matches -> assume 15 % drift"
+    ],
+    [
+      91.0,
+      "reached wp 5"
+    ],
+    [
+      91.0,
+      "return: drift (after wp 5/26)"
+    ],
+    [
+      91.0,
+      "near exit: scanning to relocalise"
+    ],
+    [
+      106.2,
+      "at exit"
+    ],
+    [
+      123.3,
+      "drift rate re-estimated: 19.6 %"
+    ],
+    [
+      123.3,
+      "relocalised: shift 3.29 m (score 0.61)"
+    ],
+    [
+      124.5,
+      "drift rate re-estimated: 19.1 %"
+    ],
+    [
+      124.5,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      125.6,
+      "drift rate re-estimated: 18.4 %"
+    ],
+    [
+      125.6,
+      "relocalised: shift 0.00 m (score 0.82)"
+    ],
+    [
+      126.8,
+      "drift rate re-estimated: 18.8 %"
+    ],
+    [
+      126.8,
+      "relocalised: shift 0.25 m (score 0.84)"
+    ],
+    [
+      128.0,
+      "drift rate re-estimated: 18.3 %"
+    ],
+    [
+      128.0,
+      "relocalised: shift 0.25 m (score 0.89)"
+    ],
+    [
+      129.2,
+      "drift rate re-estimated: 18.6 %"
+    ],
+    [
+      129.2,
+      "relocalised: shift 0.25 m (score 0.86)"
+    ],
+    [
+      130.2,
+      "drift rate re-estimated: 18.0 %"
+    ],
+    [
+      130.2,
+      "relocalised: shift 0.00 m (score 0.89)"
+    ],
+    [
+      131.2,
+      "drift rate re-estimated: 17.5 %"
+    ],
+    [
+      131.2,
+      "relocalised: shift 0.00 m (score 0.91)"
+    ],
+    [
+      132.2,
+      "drift rate re-estimated: 17.2 %"
+    ],
+    [
+      132.2,
+      "relocalised: shift 0.25 m (score 0.87)"
+    ],
+    [
+      133.4,
+      "drift rate re-estimated: 17.6 %"
+    ],
+    [
+      133.4,
+      "relocalised: shift 0.25 m (score 0.86)"
+    ],
+    [
+      134.6,
+      "drift rate re-estimated: 17.0 %"
+    ],
+    [
+      134.6,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      135.7,
+      "drift rate re-estimated: 17.4 %"
+    ],
+    [
+      135.7,
+      "relocalised: shift 0.25 m (score 0.82)"
+    ],
+    [
+      136.7,
+      "drift rate re-estimated: 17.0 %"
+    ],
+    [
+      136.7,
+      "relocalised: shift 0.00 m (score 0.84)"
+    ],
+    [
+      141.2,
+      "home (own estimate)"
+    ]
+  ],
+  "rooms_searched": 1,
+  "rooms_total": 12,
+  "survivor_found": false,
+  "corrected_error_max_m": 3.39
+}
