@@ -30,7 +30,39 @@ The Monte Carlo numbers on this page come from the offline bench (`sim/offline/s
 
 All numbers below come from the **final code** (Stage 5 including the two fixes added after the first real flights: recovery when stuck and the correction check; see [Stage 5b](#stage-5b-two-fixes-from-the-real-flights)). Results: [`results/stage5/offline_v2/`](../results/stage5/offline_v2/). The first version's numbers are kept in [`results/stage5/offline/`](../results/stage5/offline/) for comparison.
 
-### Deep random buildings (10 buildings × 4 drift levels × 4 policies = 160 runs)
+### Final study: 30 runs per cell and sensitivity (v3, 1200 runs)
+
+The 160-run table below had only 10 runs per cell, so its error bars were wide. In v3 every building is flown with **3 drift seeds** (b, b+100, b+200): 10 buildings × 4 policies × 4 drift levels × 3 seeds = **480 runs, 30 per cell**. A **sensitivity study** then re-flies the proposed method with one setting changed at a time (capture radius γ = 2 or 4 m instead of 3; drift prior r₀ = 2 or 10 % instead of 5): 480 more runs. Results: [`results/stage5/offline_v3/`](../results/stage5/offline_v3/) (`summary_v3.md`, `sensitivity.md`).
+
+| Safe return within 2 m (30 runs each) | 2 % | 5 % | 10 % | 20 % |
+|---|---|---|---|---|
+| **Proposed** | **100 %** | **100 %** | **97 %** | **67 %** |
+| No return decision | 100 % | 13 % | 20 % | 20 % |
+| Return on link loss | 100 % | 77 % | 0 % | 0 % |
+| No drift awareness | 0 % | 0 % | 0 % | 0 % |
+
+- 5–20 % drift: proposed 79/90 vs 16/90 without the decision (Fisher p ≈ 3e-22) and 23/90 for return on link loss (p ≈ 7e-18).
+- Runs with a collision: 4/120 vs 36/120 without the decision (p ≈ 2e-8).
+- Rooms searched: 4.5 / 3.1 / 1.6 / 0.6 (proposed) vs 7.0 / 4.9 / 3.3 / 1.4 (no decision).
+- 20 % drift is the limit: all 30 runs turned back for drift, but 10 landed 9–15 m off because the entrance could no longer be recognised on the way out. With 10 runs per cell this looked like 80 %; 30 runs show 67 %.
+
+![Safe return and collisions, 30 runs per cell](../media/stage5/v3_safe_return.png)
+
+**Sensitivity** (proposed method; safe return / runs with collision / rooms searched):
+
+| Setting | 2 % | 5 % | 10 % | 20 % |
+|---|---|---|---|---|
+| γ = 2 m | 93 / 7 / 2.1 | 100 / 0 / 2.0 | 100 / 3 / 1.4 | 70 / 10 / 0.6 |
+| **default (γ 3 m, r₀ 5 %)** | 100 / 0 / 4.5 | 100 / 0 / 3.1 | 97 / 3 / 1.6 | 67 / 10 / 0.6 |
+| γ = 4 m | 100 / 0 / 5.3 | 97 / 0 / 3.4 | 97 / 3 / 2.0 | 60 / 13 / 0.7 |
+| r₀ = 2 % | 100 / 0 / 5.4 | 100 / 0 / 3.3 | 100 / 0 / 1.2 | 67 / 10 / 0.5 |
+| r₀ = 10 % | 97 / 0 / 1.9 | 100 / 0 / 1.7 | 100 / 7 / 1.3 | 60 / 13 / 0.6 |
+
+Safety hardly changes (88–90 of 90 safe returns at 2–10 % drift for every setting); what changes is how far the drone goes. A tight radius or pessimistic prior halves the rooms searched and almost never reaches the survivor's room (0–1 of 120 runs); a wide radius or optimistic prior searches more (survivor room in 27–34 of 120, default 25). The settings are a coverage dial, not a safety risk, within this range.
+
+![Sensitivity](../media/stage5/v3_sensitivity.png)
+
+### First study: deep random buildings (10 buildings × 4 drift levels × 4 policies = 160 runs)
 
 ![Policies vs drift in random buildings](../results/stage5/offline_v2/buildings_vs_drift.png)
 
@@ -219,6 +251,9 @@ python3 sim/scripts/stage4_report.py --log _archive/stage5_<run>.ulg --run-dir r
 python3 sim/offline/stage4_bench.py --policy stage4 --drift 5 --seed 0      # Stage 1 building
 python3 sim/offline/stage5_sweep.py --out results/stage5/offline_v2
 python3 sim/offline/stage5_report.py --dir results/stage5/offline_v2
+# final study: 3 drift seeds per building + sensitivity (1200 runs), then its report
+python3 sim/offline/stage5_sweep.py --build_seeds 3 --sensitivity --out results/stage5/offline_v3
+python3 sim/offline/stage5_v3_report.py results/stage5/offline_v3
 ```
 
 ## Limitations
@@ -237,3 +272,4 @@ python3 sim/offline/stage5_report.py --dir results/stage5/offline_v2
 1. Paper: method, Stage 4–5 results (offline + 7 real flights with the final code), limitations.
 2. Rotation-aware matching and yaw drift in the VIO model.
 3. More drift seeds per building in the real simulator.
+4. Real-camera handheld test (Stage 6): the method on a real depth camera and real visual odometry in a real building.

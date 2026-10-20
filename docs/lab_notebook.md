@@ -109,3 +109,10 @@ A dated log of decisions, problems and fixes. Newest at the bottom.
 - 20 % flights land right at the 2 m limit: works, but no margin (matches offline 80 %).
 - One 20 % flight (building 1) invalid: the laptop slept mid-flight and the simulation clock jumped; discarded to `_archive/stage5_failed_runs/` and repeated.
 
+
+## Stage 5 final study (v3): 30 runs per cell + sensitivity
+- 3 drift seeds per building (b, b+100, b+200): 480 building runs, 30 per cell; plus 480 sensitivity runs (γ 2/4 m, r₀ 2/10 %). Total with the Stage 1 building: 1200 runs.
+- Proposed: 100 / 100 / 97 / 67 % safe return at 2 / 5 / 10 / 20 % drift (was 100 / 100 / 90 / 80 % with 10 runs). No decision: 100 / 13 / 20 / 20 %.
+- 5–20 %: 79/90 vs 16/90 (p ≈ 3e-22); collisions 4/120 vs 36/120 (p ≈ 2e-8).
+- 20 % drift is the real limit: 10 of 30 turned back in time but could not recognise the entrance on the way out (9–15 m off).
+- Sensitivity: safety flat (88–90/90 at 2–10 % for every setting); rooms searched and survivor-room reach change (coverage dial).
