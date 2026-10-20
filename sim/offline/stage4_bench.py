@@ -56,7 +56,7 @@ def clearance(world, p, alt=3.0, radius=0.3):
 
 
 def run(policy, drift_pct, seed, r_hat=0.05, budget=2.0, gps_off_east=14.0, tmax=None, keep_traj=False, jam_link=True,
-        world=None, rate_estimator="baseline", wall_limit_s=None):
+        world=None, rate_estimator="baseline", wall_limit_s=None, capture=3.0):
     """jam_link: the jammer that takes GPS at the door also takes the radio link (Lost-Link scenario)."""
     mk = None
     if world is None:                                    # the Stage 1-4 building
@@ -72,7 +72,8 @@ def run(policy, drift_pct, seed, r_hat=0.05, budget=2.0, gps_off_east=14.0, tmax
     wps = [(n, e) for (e, n) in w.WAYPOINTS]
     rng = np.random.default_rng(seed)
     proj = core.DepthProjector(stride=8)
-    m = stage4.LostLinkMission(wps, policy=policy, r_hat=r_hat, budget_m=budget, map_kwargs=mk, rate_estimator=rate_estimator)
+    m = stage4.LostLinkMission(wps, policy=policy, r_hat=r_hat, budget_m=budget, capture_m=capture, map_kwargs=mk,
+                               rate_estimator=rate_estimator)
     pt = np.array([0.0, 0.0, -3.0]); yaw = 0.0; d = np.zeros(2); ang = rng.uniform(0, 2 * np.pi)
     dt, t, gps = 0.1, 0.0, True
     hits, last, min_cl, traj, link_lost_at = [], None, 1e9, [], None
@@ -119,7 +120,7 @@ def run(policy, drift_pct, seed, r_hat=0.05, budget=2.0, gps_off_east=14.0, tmax
             traj.append((t, pt[0], pt[1], m.p[0], m.p[1], info.get("mode", ""), m.state, lk, m.sigma_pred))
         t += dt
     res = {
-        "policy": policy, "drift_pct": drift_pct, "seed": seed, "r_hat": r_hat, "budget_m": budget,
+        "policy": policy, "drift_pct": drift_pct, "seed": seed, "r_hat": r_hat, "budget_m": budget, "capture_m": capture,
         "home_by_own_estimate": bool(m.done), "timed_out": not m.done,
         "waypoints_reached": m.k, "n_waypoints": len(wps), "world": world_, "rate_estimator": rate_estimator,
         "r_hat_final": round(m.dec.r_hat, 4), "skipped_wps": len(m.skipped), "stuck_events": getattr(m, "n_stuck", 0), "map_clears": getattr(m, "n_map_clears", 0), "relocs_gated": getattr(m, "n_gated", 0), "compute_capped": capped,
